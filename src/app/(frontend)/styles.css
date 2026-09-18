@@ -1,8 +1,12 @@
 :root {
   --font-mono: 'Roboto Mono', monospace;
+  --color-black: #1a1a1a;
+  --color-white: #fefefe;
 }
 
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -18,11 +22,12 @@ html,
 body,
 #app {
   height: 100%;
+   overflow-x: hidden;
 }
 
 body {
   font-family: system-ui;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 32px;
 
   margin: 0;
@@ -38,37 +43,31 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+  user-select: none;
 }
 
-h1 {
-  margin: 40px 0;
-  font-size: 64px;
-  line-height: 70px;
-  font-weight: bold;
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
-  @media (max-width: 1024px) {
-    margin: 24px 0;
-    font-size: 42px;
-    line-height: 42px;
-  }
+h1,
+h2 {
+  font-family: var(--font-heading);
+  font-size: 60px;
+  color: var(--color-black);
+}
 
-  @media (max-width: 768px) {
-    font-size: 38px;
-    line-height: 38px;
-  }
-
-  @media (max-width: 400px) {
-    font-size: 32px;
-    line-height: 32px;
-  }
+h3 {
+  font-family: var(--font-heading);
+  font-size: 31px;
+  color: var(--color-black);
 }
 
 p {
-  margin: 24px 0;
-
-  @media (max-width: 1024px) {
-    margin: calc(var(--base) * 0.75) 0;
-  }
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--color-black);
 }
 
 a {
@@ -89,7 +88,14 @@ svg {
   vertical-align: middle;
 }
 
-.home {
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 100px 70px;
+}
+
+/* .home {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -160,5 +166,41 @@ svg {
       background: rgb(60, 60, 60);
       border-radius: 4px;
     }
+  }
+} */
+
+@media (max-width: 976px) {
+   h1,
+  h2 {
+    font-size: 50px;
+  }
+
+  h3 {
+    font-size: 28px;
+  }
+
+  p {
+    font-size: 15px;
+  }
+  .container {
+    padding: 60px 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  h1,
+  h2 {
+    font-size: 38px;
+  }
+
+  h3 {
+    font-size: 25px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+  .container {
+    padding: 50px 20px;
   }
 }
