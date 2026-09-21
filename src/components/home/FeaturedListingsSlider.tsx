@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
-import './FeaturedListings.css'
+// import './FeaturedListings.css'
 
 import 'swiper/css'
 import 'swiper/css/navigation'

@@ -23,7 +23,7 @@ export default async function ListingsSection() {
   return (
     <section className="listings-section">
       <div className="container-custom">
-        <div className="section-heading">
+        <div className="section-heading mb-12">
           <h2>Our Listings</h2>
         </div>
 
