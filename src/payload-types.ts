@@ -170,39 +170,6 @@ export interface Media {
 export interface Property {
   id: number;
   name: string;
-  slug: string;
-  address?: string | null;
-  city?: string | null;
-  state?: string | null;
-  price?: number | null;
-  bedrooms?: number | null;
-  bathrooms?: number | null;
-  acArea?: string | null;
-  designTheme?: string | null;
-  description?: string | null;
-  broker?: string | null;
-  builder?: string | null;
-  architect?: string | null;
-  interiorDesigner?: string | null;
-  isFeatured?: boolean | null;
-  featuredImage?: (number | null) | Media;
-  gallery?:
-    | {
-        image: number | Media;
-        showInBanner?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  floorPlans?:
-    | {
-        title?: string | null;
-        image?: (number | null) | Media;
-        id?: string | null;
-      }[]
-    | null;
-  virtualTourUrl?: string | null;
-  status: 'for-sale' | 'sold-out' | 'under-contract';
-  cardImage: number | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -330,39 +297,6 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface PropertiesSelect<T extends boolean = true> {
   name?: T;
-  slug?: T;
-  address?: T;
-  city?: T;
-  state?: T;
-  price?: T;
-  bedrooms?: T;
-  bathrooms?: T;
-  acArea?: T;
-  designTheme?: T;
-  description?: T;
-  broker?: T;
-  builder?: T;
-  architect?: T;
-  interiorDesigner?: T;
-  isFeatured?: T;
-  featuredImage?: T;
-  gallery?:
-    | T
-    | {
-        image?: T;
-        showInBanner?: T;
-        id?: T;
-      };
-  floorPlans?:
-    | T
-    | {
-        title?: T;
-        image?: T;
-        id?: T;
-      };
-  virtualTourUrl?: T;
-  status?: T;
-  cardImage?: T;
   updatedAt?: T;
   createdAt?: T;
 }
