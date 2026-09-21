@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
@@ -32,9 +33,12 @@ export default function FeaturedListingsSlider({ properties }: { properties: any
         <SwiperSlide key={property.id}>
           <div className="featured-card">
             {property.featuredImage?.url && (
-              <img
+              <Image
                 src={property.featuredImage.url}
                 alt={property.name}
+                width={property.featuredImage.width || 1920}
+                height={property.featuredImage.height || 1080}
+                sizes="(max-width: 1400px) 100vw, 1400px"
                 className="featured-card__image"
               />
             )}

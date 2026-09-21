@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 type HeroVideoProps = {
@@ -25,11 +26,14 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
 
   return (
     <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* Hero poster is the LCP element: preload it and serve a responsive size. */}
+      <Image
         src={poster}
         alt=""
         aria-hidden="true"
+        fill
+        priority
+        sizes="100vw"
         className="hero-poster"
         style={{ opacity: isVideoReady ? 0 : 1 }}
       />

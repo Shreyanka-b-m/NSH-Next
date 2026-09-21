@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -63,7 +64,14 @@ function PropertyCard({ property }: { property: any }) {
     <Link href={`/properties/${property.slug}`} className="listing-card">
       <div className="listing-card__image-wrapper">
         {property.cardImage?.url && (
-          <img src={property.cardImage.url} alt={property.name} className="listing-card__image" />
+          <Image
+            src={property.cardImage.url}
+            alt={property.name}
+            width={property.cardImage.width || 800}
+            height={property.cardImage.height || 600}
+            sizes="(max-width: 768px) 85vw, (max-width: 1200px) 50vw, 33vw"
+            className="listing-card__image"
+          />
         )}
 
         <div className={`listing-status ${status.className}`}>

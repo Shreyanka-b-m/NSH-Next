@@ -8,7 +8,9 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  poweredByHeader: false,
   images: {
+    formats: ['image/avif', 'image/webp'],
     localPatterns: [
       {
         pathname: '/api/media/file/**',
