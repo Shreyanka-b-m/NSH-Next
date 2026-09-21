@@ -4,15 +4,22 @@ import Link from 'next/link'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import 'swiper/css'
+import { Navigation, Pagination } from 'swiper/modules'
 
 import './ListingsSection.css'
 
 export default function ListingsSlider({ properties }: { properties: any[] }) {
   return (
     <Swiper
+      modules={[Navigation, Pagination]}
       slidesPerView={1.2}
       spaceBetween={24}
       grabCursor={true}
+      navigation
+      pagination={{
+        dynamicBullets: true,
+        clickable: true,
+      }}
       breakpoints={{
         768: {
           slidesPerView: 2,

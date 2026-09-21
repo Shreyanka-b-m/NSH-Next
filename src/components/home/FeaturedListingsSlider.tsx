@@ -20,10 +20,13 @@ export default function FeaturedListingsSlider({ properties }: { properties: any
       }}
       autoplay={{
         delay: 2500,
-        disableOnInteraction: true,
+        pauseOnMouseEnter: true,
       }}
+      speed={900}
+      grabCursor={true}
       slidesPerView={1}
       spaceBetween={30}
+      loop={true}
     >
       {properties.map((property) => (
         <SwiperSlide key={property.id}>
