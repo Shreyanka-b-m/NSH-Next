@@ -23,7 +23,7 @@ export default async function FeaturedListings() {
   return (
     <section className="featured-listings">
       <div className="container-custom">
-        <div className="featured-listings__header">
+        <div className="featured-listings__header section-heading mb-12">
           <h2>Our Featured Listings</h2>
         </div>
 

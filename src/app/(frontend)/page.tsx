@@ -1,73 +1,44 @@
-import { headers as getHeaders } from 'next/headers.js'
 import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+
 import Link from 'next/link'
 import FeaturedListings from '@/components/home/FeaturedListings'
 import ListingsSection from '@/components/home/ListingsSection'
+import HeroVideo from '@/components/home/HeroVideo'
+import SectionDivider from '@/components/common/SectionDivider'
 
-import config from '@/payload.config'
 import './styles.css'
+import VideoShowcase from '@/components/home/VideoShowcase'
 
-// export default async function HomePage() {
-//   const headers = await getHeaders()
-//   const payloadConfig = await config
-//   const payload = await getPayload({ config: payloadConfig })
-//   const { user } = await payload.auth({ headers })
-
-//   const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
-
-//   return (
-//     <div className="home">
-//       <div className="content">
-//         <picture>
-//           <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg" />
-//           <Image
-//             alt="Payload Logo"
-//             height={65}
-//             src="https://raw.githubusercontent.com/payloadcms/payload/3.x/packages/ui/src/assets/payload-favicon.svg"
-//             width={65}
-//           />
-//         </picture>
-//         {!user && <h1>Welcome to your new project.</h1>}
-//         {user && <h1>Welcome back, {user.email}</h1>}
-//         <div className="links">
-//           <a
-//             className="admin"
-//             href={payloadConfig.routes.admin}
-//             rel="noopener noreferrer"
-//             target="_blank"
-//           >
-//             Go to admin panel
-//           </a>
-//           <a
-//             className="docs"
-//             href="https://payloadcms.com/docs"
-//             rel="noopener noreferrer"
-//             target="_blank"
-//           >
-//             Documentation
-//           </a>
-//         </div>
-//       </div>
-//       <div className="footer">
-//         <p>Update this page by editing</p>
-//         <a className="codeLink" href={fileURL}>
-//           <code>app/(frontend)/page.tsx</code>
-//         </a>
-//       </div>
-//     </div>
-//   )
-// }
+const items = [
+  {
+    title: 'INDULGE',
+    subtitle: 'In Ultimate Luxury',
+    description:
+      'Every home reflects our commitment to excellence, blending meticulous craftsmanship with the finest materials. Designed by industry experts, from foundation to finishing, our spaces redefine luxury living. Experience unmatched quality and service, crafted just for you.',
+  },
+  {
+    title: 'IMAGINE',
+    subtitle: 'Your Future Home Today',
+    description:
+      'Visualize your dream home with the latest technology. Our 3D designs, virtual reality, and augmented reality experiences let you explore every detail in stunning clarity. Immerse yourself in the world of possibilities and bring your vision to life before a single brick is laid.',
+  },
+  {
+    title: 'DISCOVER',
+    subtitle: 'Your Perfect Oasis',
+    description:
+      'We believe that location is everything. Our experts carefully select prime locations that offer tranquillity, convenience, and prestige. Enjoy seamless access to top schools, parks, hospitals, and major highways, providing effortless connectivity.',
+  },
+]
 
 export default function HomePage() {
   return (
     <>
+      {/****************** Hero Section ******************/}
       <section className="hero">
-        <video className="hero-video" autoPlay muted loop playsInline>
-          <source src="/assets/videos/sample.mp4" type="video/mp4" />
-        </video>
+        <HeroVideo
+          poster="/assets/images/hero-poster.webp"
+          mp4Src="/assets/videos/hero-video 2mb.mp4"
+        />
 
         <div className="hero-overlay" />
 
@@ -86,8 +57,14 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/****************** Featured Listings Section ******************/}
+      <FeaturedListings />
+
+      <SectionDivider />
+
+      {/****************** About Section ******************/}
       <section className="container-custom">
-        <h2 className="mb-10">
+        <h2 className="mb-10 section-heading">
           Timeless <span style={{ color: 'var(--color-brown)' }}>Comfort</span> in every detail
         </h2>
         <p className="pb-5">
@@ -100,32 +77,105 @@ export default function HomePage() {
         </Link>
       </section>
 
-      <section className="bg-[var(--color-black)] text-white container-custom flex flex-row gap-10">
-        <div className="flex-1 align-center justify-center flex flex-col">
-          <h2 className="mb-10">Our Concierge Services</h2>
-          <p className="pb-5">
-            We’re here for you long after you get the keys. From Mortgage Assistance and Handyman
-            Service to Transfer utilities —and so much more— you can count on our trusted network to
-            make settling into your new home effortless.
-          </p>
-          <Link href="/concierge" className="btn btn-light">
-            Learn More
-          </Link>
+      {/****************** Why Choose Us Section ******************/}
+      <section className="black-pattern-bg relative bg-cover bg-center">
+        <div className="container-custom relative z-10">
+          <h2 className="mb-10 section-heading-black-bg text-white">Why Choose Us? </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
+            {items.map((item) => (
+              <div key={item.title} className="text-center lg:text-left">
+                <h3 className="text-white mb-2">{item.title}</h3>
+
+                <p className="text-[#D4B08A] mb-4">{item.subtitle}</p>
+
+                <div className="h-px bg-white/30 mb-6" />
+
+                <p className="text-white leading-[1.8]">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/****************** Listings Section ******************/}
+      <ListingsSection />
+
+      {/****************** Concierge Services Section ******************/}
+
+      <section className="concierge-cta">
+        <div className="concierge-content">
+          <div className="concierge-inner">
+            <h2 className="section-heading-black-bg text-white mb-12">
+              Our <span className="text-[#D4B08A]">Concierge</span> Services
+            </h2>
+
+            <p className="text-white mb-8">
+              We’re here for you long after you get the keys. From Mortgage Assistance and Handyman
+              Service to Transfer utilities — and so much more— you can count on our trusted network
+              to make settling into your new home effortless.
+            </p>
+
+            <a href="/concierge" className="btn btn-light">
+              Learn More
+            </a>
+          </div>
         </div>
 
-        <div className="flex-1">
+        <div className="concierge-image">
           <Image
             src="/assets/images/concierge-services.webp"
-            width={500}
-            height={500}
-            alt="Picture of the author"
+            alt="Concierge Services"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
           />
         </div>
       </section>
 
-      <FeaturedListings />
+      <SectionDivider />
 
-      <ListingsSection />
+      {/****************** Video Showcase Section ******************/}
+      <VideoShowcase />
+
+      {/****************** Contact Form Section ******************/}
+      <section className="white-pattern-bg relative bg-cover bg-center">
+        <div className="container-custom">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left Content */}
+            <div>
+              <h2 className="text-[52px] md:text-[72px] lg:text-[86px] text-black">
+                LET'S FIND YOUR
+                <br />
+                <span className="text-[#8A561F]">DREAM HOME</span>
+                <br />
+                TOGETHER
+              </h2>
+            </div>
+
+            {/* Right Content */}
+            <div className="flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-20 h-[1px] bg-[#8A561F] mx-auto mb-6" />
+
+                <h3 className="text-3xl md:text-4xl font-light mb-4">Contact Form Coming Soon</h3>
+
+                <p className="text-gray-600 max-w-md mx-auto">
+                  We're currently building the contact experience. Soon you'll be able to submit
+                  inquiries directly from this page.
+                </p>
+
+                <button
+                  disabled
+                  className="mt-8 px-8 py-4 border border-black text-black opacity-50 cursor-not-allowed"
+                >
+                  Coming Soon
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
