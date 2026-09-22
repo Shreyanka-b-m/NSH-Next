@@ -14,6 +14,9 @@ const bodyFont = localFont({
   variable: '--font-body',
 })
 
+// Pages query Payload/Postgres; render at request time so the Docker build needs no database.
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   description:
     'Luxury Homes redefined. Explore the epitome of modern living with Novel Signature Homes.',

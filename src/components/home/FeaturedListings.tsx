@@ -1,24 +1,8 @@
-// src/components/home/FeaturedListings.tsx
-
-import { getPayload } from 'payload'
-import config from '@/payload.config'
+import { getFeaturedProperties } from '@/lib/properties'
 import FeaturedListingsSlider from './FeaturedListingsSlider'
 
 export default async function FeaturedListings() {
-  const payload = await getPayload({
-    config,
-  })
-
-  const properties = await payload.find({
-    collection: 'properties',
-    where: {
-      isFeatured: {
-        equals: true,
-      },
-    },
-    depth: 2,
-    limit: 20,
-  })
+  const properties = await getFeaturedProperties()
 
   return (
     <section className="featured-listings">
@@ -27,7 +11,7 @@ export default async function FeaturedListings() {
           <h2>Our Featured Listings</h2>
         </div>
 
-        <FeaturedListingsSlider properties={properties.docs} />
+        <FeaturedListingsSlider properties={properties} />
       </div>
     </section>
   )

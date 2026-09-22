@@ -1,16 +1,8 @@
 import Link from 'next/link'
-import { getPayload } from 'payload'
-import config from '@/payload.config'
+import { getPropertyIndex } from '@/lib/properties'
 
 export default async function PropertiesPage() {
-  const payload = await getPayload({
-    config,
-  })
-
-  const properties = await payload.find({
-    collection: 'properties',
-    limit: 100,
-  })
+  const properties = await getPropertyIndex()
 
   return (
     <div className="container-custom">
@@ -18,7 +10,7 @@ export default async function PropertiesPage() {
 
       <br />
 
-      {properties.docs.map((property: any) => (
+      {properties.map((property: any) => (
         <div key={property.id}>
           <Link href={`/properties/${property.slug}`}>{property.name}</Link>
         </div>

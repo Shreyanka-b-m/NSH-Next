@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getPayload } from 'payload'
-import config from '@/payload.config'
+import Image from 'next/image'
+import { getPropertyBySlug } from '@/lib/properties'
 
 type PageProps = {
   params: Promise<{
@@ -11,22 +11,7 @@ type PageProps = {
 export default async function PropertyPage({ params }: PageProps) {
   const { slug } = await params
 
-  const payload = await getPayload({
-    config,
-  })
-
-  const result = await payload.find({
-    collection: 'properties',
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-    depth: 2,
-    limit: 1,
-  })
-
-  const property = result.docs[0]
+  const property = await getPropertyBySlug(slug)
 
   if (!property) {
     notFound()
@@ -50,7 +35,13 @@ export default async function PropertyPage({ params }: PageProps) {
         {bannerImages.map((item: any, index: number) => (
           <div key={index}>
             {item.image?.url && (
-              <img src={item.image.url} alt={property.name} width={1200} height={700} />
+              <Image
+                src={item.image.url}
+                alt={property.name}
+                width={1200}
+                height={700}
+                sizes="(max-width: 1200px) 100vw, 1200px"
+              />
             )}
           </div>
         ))}
@@ -156,7 +147,13 @@ export default async function PropertyPage({ params }: PageProps) {
         {property.gallery?.map((item: any, index: number) => (
           <div key={index}>
             {item.image?.url && (
-              <img src={item.image.url} alt={`Gallery ${index + 1}`} width={600} height={400} />
+              <Image
+                src={item.image.url}
+                alt={`Gallery ${index + 1}`}
+                width={600}
+                height={400}
+                sizes="(max-width: 600px) 100vw, 600px"
+              />
             )}
           </div>
         ))}
@@ -171,7 +168,13 @@ export default async function PropertyPage({ params }: PageProps) {
             <h3>{item.title}</h3>
 
             {item.image?.url && (
-              <img src={item.image.url} alt={item.title} width={600} height={400} />
+              <Image
+                src={item.image.url}
+                alt={item.title || property.name}
+                width={600}
+                height={400}
+                sizes="(max-width: 600px) 100vw, 600px"
+              />
             )}
           </div>
         ))}
