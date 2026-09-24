@@ -8,7 +8,9 @@ export default async function FeaturedListings() {
     <section className="featured-listings">
       <div className="container-custom">
         <div className="featured-listings__header section-heading mb-12">
-          <h2>Our Featured Listings</h2>
+          <h2>
+            Our <span style={{ color: 'var(--color-brown)' }}>Featured </span>Listings
+          </h2>
         </div>
 
         <FeaturedListingsSlider properties={properties} />

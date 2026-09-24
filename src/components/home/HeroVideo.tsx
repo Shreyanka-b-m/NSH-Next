@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type HeroVideoProps = {
   poster: string
@@ -12,6 +12,7 @@ type HeroVideoProps = {
 export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
   const [isVideoReady, setIsVideoReady] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     if (document.readyState === 'complete') {
@@ -23,6 +24,21 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
     window.addEventListener('load', onLoad, { once: true })
     return () => window.removeEventListener('load', onLoad)
   }, [])
+
+  useEffect(() => {
+    if (!shouldLoadVideo) return
+    const video = videoRef.current
+    if (!video) return
+
+    // iOS Safari ignores the `autoplay` attribute on elements mounted after
+    // initial parse — play() must be called explicitly once muted+playsInline
+    // are set as DOM properties, not just JSX attributes.
+    video.muted = true
+    video.playsInline = true
+    video.play().catch(() => {
+      // Autoplay was blocked (e.g. low power mode); poster stays visible.
+    })
+  }, [shouldLoadVideo])
 
   return (
     <>
@@ -40,13 +56,14 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
 
       {shouldLoadVideo && (
         <video
+          ref={videoRef}
           className="hero-video"
           style={{ opacity: isVideoReady ? 1 : 0 }}
           autoPlay
           muted
           loop
           playsInline
-          preload="none"
+          preload="auto"
           poster={poster}
           onPlaying={() => setIsVideoReady(true)}
         >

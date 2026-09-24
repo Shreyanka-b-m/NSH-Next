@@ -186,6 +186,10 @@ export interface Property {
   interiorDesigner?: string | null;
   isFeatured?: boolean | null;
   featuredImage?: (number | null) | Media;
+  /**
+   * Optional name shown in the homepage featured slider instead of the property name.
+   */
+  featuredDisplayName?: string | null;
   gallery?:
     | {
         image: number | Media;
@@ -346,6 +350,7 @@ export interface PropertiesSelect<T extends boolean = true> {
   interiorDesigner?: T;
   isFeatured?: T;
   featuredImage?: T;
+  featuredDisplayName?: T;
   gallery?:
     | T
     | {

@@ -1,0 +1,5 @@
+/* Swiper renders .swiper-slide with a hardcoded width: 100%; this can't be
+   overridden with a Tailwind class since it targets Swiper's own element. */
+.listings-swiper .swiper-slide {
+  width: auto;
+}
