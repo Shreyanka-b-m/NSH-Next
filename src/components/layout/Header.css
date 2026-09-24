@@ -80,6 +80,91 @@
   transform: scaleX(1);
 }
 
+/* Contact dropdown */
+.header__dropdown {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.header__dropdown-toggle {
+  gap: 8px;
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+}
+
+.header__dropdown-chevron {
+  transition: transform 0.25s ease;
+}
+
+.header__dropdown--open .header__dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.header__dropdown-menu {
+  position: absolute;
+  top: 100%;
+  /* Last item in the nav, so anchor to its right edge to stay on screen. */
+  right: 0;
+
+  min-width: 300px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  background: rgba(26, 26, 26, 0.95);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s;
+}
+
+.header__dropdown--open .header__dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Open on hover only for real pointers; touch devices use the click toggle. */
+@media (hover: hover) and (min-width: 921px) {
+  .header__dropdown:hover .header__dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .header__dropdown:hover .header__dropdown-chevron {
+    transform: rotate(180deg);
+  }
+}
+
+.header__dropdown-link {
+  display: block;
+  padding: 12px 22px;
+
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  white-space: nowrap;
+
+  transition: background-color 0.2s ease;
+}
+
+.header__dropdown-link:hover,
+.header__dropdown-link:focus-visible,
+.header__dropdown-link--active {
+  background: #000;
+}
+
 .header__mobile-toggle {
   display: none;
   align-self: center;
@@ -129,8 +214,44 @@
   }
 
   .header__nav--open {
-    max-height: 400px;
+    max-height: calc(100dvh - 80px);
+    overflow-y: auto;
     opacity: 1;
+  }
+
+  .header__dropdown {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .header__dropdown-toggle {
+    justify-content: flex-start;
+  }
+
+  /* Inline accordion on mobile instead of a floating panel. */
+  .header__dropdown-menu {
+    position: static;
+    min-width: 0;
+    max-height: 0;
+    overflow: hidden;
+
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+
+    transition:
+      max-height 0.3s ease,
+      opacity 0.25s ease,
+      visibility 0.3s;
+  }
+
+  .header__dropdown--open .header__dropdown-menu {
+    max-height: 400px;
+  }
+
+  .header__dropdown-link {
+    padding: 12px 20px 12px 36px;
+    white-space: normal;
   }
 
   .header__nav-link {
