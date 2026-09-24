@@ -9,6 +9,9 @@ import SectionDivider from '@/components/common/SectionDivider'
 import './styles.css'
 import VideoShowcase from '@/components/home/VideoShowcase'
 
+// Queries Payload/Postgres; render at request time so the Docker build needs no database.
+export const dynamic = 'force-dynamic'
+
 const why_choose_items = [
   {
     title: 'INDULGE',
