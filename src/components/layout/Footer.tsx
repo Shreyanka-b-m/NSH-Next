@@ -100,7 +100,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="w-full md:w-auto md:min-w-[320px]">
-            <h3 className="relative mb-6 inline-block pb-3 font-body text-sm after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-[100%] after:-translate-x-1/2 after:bg-white/25 after:content-[''] md:block md:w-full md:border-b md:border-white/100 md:pb-3 md:after:content-none">
+            <h3 className="relative mb-6 inline-block pb-3 font-body! after:absolute after:bottom-0 after:left-1/2 after:h-px after:w-[100%] after:-translate-x-1/2 after:bg-white/25 after:content-[''] md:block md:w-full md:border-b md:border-white/100 md:pb-3 md:after:content-none">
               Contact Us
             </h3>
 
@@ -139,11 +139,11 @@ export default function Footer() {
         <div className="mt-9 pt-6 text-center md:mt-[50px]">
           <p className="text-sm text-white">
             Copyright © {new Date().getFullYear()} Novel Signature Homes | All Rights Reserved.{' '}
-            <Link href="/privacy-policy" className="underline hover:text-white">
+            <Link href="/privacy-policy" className="underline! hover:text-white/80!">
               Privacy-Policy
             </Link>
             .{' '}
-            <Link href="/terms-and-conditions" className="underline hover:text-white">
+            <Link href="/terms-and-conditions" className="underline! hover:text-white/80!">
               Terms&Conditions
             </Link>
           </p>

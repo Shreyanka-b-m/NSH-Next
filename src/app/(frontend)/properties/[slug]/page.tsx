@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getPropertyBySlug } from '@/lib/properties'
 
+// Queries Payload/Postgres; render at request time so the Docker build needs no database.
+export const dynamic = 'force-dynamic'
+
 type PageProps = {
   params: Promise<{
     slug: string
