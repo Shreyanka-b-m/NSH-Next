@@ -14,7 +14,14 @@ export const getFeaturedProperties = unstable_cache(
       where: { isFeatured: { equals: true } },
       depth: 1,
       limit: 20,
-      select: { name: true, slug: true, bedrooms: true, acArea: true, featuredImage: true },
+      select: {
+        name: true,
+        slug: true,
+        bedrooms: true,
+        acArea: true,
+        featuredImage: true,
+        featuredDisplayName: true,
+      },
     })
     return docs
   },

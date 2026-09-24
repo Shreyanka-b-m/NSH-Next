@@ -9,7 +9,7 @@ import SectionDivider from '@/components/common/SectionDivider'
 import './styles.css'
 import VideoShowcase from '@/components/home/VideoShowcase'
 
-const items = [
+const why_choose_items = [
   {
     title: 'INDULGE',
     subtitle: 'In Ultimate Luxury',
@@ -83,15 +83,22 @@ export default function HomePage() {
           <h2 className="mb-10 section-heading-black-bg text-white">Why Choose Us? </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-20">
-            {items.map((item) => (
+            {why_choose_items.map((item) => (
               <div key={item.title} className="text-center lg:text-left">
                 <h3 className="text-white mb-2">{item.title}</h3>
 
-                <p className="text-[#D4B08A] mb-4">{item.subtitle}</p>
+                {/* <p className="text-[#dfcbb6] mb-4">{item.subtitle}</p> */}
+                {/* <p className="text-[#dfcbb6] mb-4 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-gradient-to-r after:from-transparent after:via-[#dfcbb6] after:to-transparent pb-2">
+                  {item.subtitle}
+                </p> */}
 
-                <div className="h-px bg-white/30 mb-6" />
+                <p className="inline-block text-[#dfcbb6] mb-5 relative pb-2 after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:bg-gradient-to-r after:from-[#DFCBB6] after:to-[#666666]">
+                  {item.subtitle}
+                </p>
 
-                <p className="text-white leading-[1.8]">{item.description}</p>
+                {/* <div className="h-px bg-white/30 mb-6" /> */}
+
+                <p className="text-white leading-[1.8] text-justify">{item.description}</p>
               </div>
             ))}
           </div>

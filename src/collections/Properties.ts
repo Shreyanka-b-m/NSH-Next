@@ -113,6 +113,17 @@ export const Properties: CollectionConfig = {
     },
 
     {
+      name: 'featuredDisplayName',
+      label: 'Featured Display Name',
+      type: 'text',
+      admin: {
+        description:
+          'Optional name shown in the homepage featured slider instead of the property name.',
+        condition: (_, data) => data.isFeatured,
+      },
+    },
+
+    {
       name: 'gallery',
       type: 'array',
 
