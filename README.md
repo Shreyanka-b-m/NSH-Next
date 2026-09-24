@@ -1,5 +1,7 @@
 # Payload Blank Template
 
+> **Project docs:** [Website forms](docs/forms/README.md): how forms are built, submitted and changed ([changelog](docs/forms/CHANGELOG.md), [decisions](docs/forms/DECISIONS.md)).
+
 This template comes configured with the bare minimum to get started on anything you need.
 
 ## Quick start
