@@ -8,6 +8,10 @@ const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  experimental: {
+    // Custom 404 for unknown URLs across both root layouts: src/app/global-not-found.tsx
+    globalNotFound: true,
+  },
   poweredByHeader: false,
   images: {
     formats: ['image/avif', 'image/webp'],
