@@ -1,47 +1,8 @@
 import React from 'react'
 import './styles.css'
-import localFont from 'next/font/local'
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-
-const headingFont = localFont({
-  src: '../../fonts/Cormorant Garamond/cormorant-garamond-v21-latin-regular.woff2',
-  variable: '--font-heading',
-})
-
-const bodyFont = localFont({
-  src: [
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-300.woff2',
-      weight: '300',
-    },
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-regular.woff2',
-      weight: '400',
-    },
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-500.woff2',
-      weight: '500',
-    },
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-600.woff2',
-      weight: '600',
-    },
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-700.woff2',
-      weight: '700',
-    },
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-800.woff2',
-      weight: '800',
-    },
-    {
-      path: '../../fonts/Montserrat/montserrat-v31-latin-900.woff2',
-      weight: '900',
-    },
-  ],
-  variable: '--font-body',
-})
+import { bodyFont, headingFont } from './fonts'
 
 export const metadata = {
   description:

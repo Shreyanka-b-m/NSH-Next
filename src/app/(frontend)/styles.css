@@ -349,6 +349,77 @@ svg {
   background-position: center;
 }
 
+/* 404 Page (src/components/common/NotFoundContent.tsx) */
+@keyframes nf-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes nf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes nf-light-on {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.22;
+  }
+}
+
+@keyframes nf-flicker {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+  50% {
+    opacity: 0.12;
+  }
+}
+
+/* Each stroke uses pathLength="1", so a dash of 1 hides it until the offset animates to 0. */
+.nf-draw [pathLength] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: nf-draw 1.8s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
+}
+
+/* The doorway light switches on once the house is drawn, then gently breathes. */
+.nf-glow {
+  opacity: 0;
+  animation:
+    nf-light-on 0.8s ease 1.9s forwards,
+    nf-flicker 4s ease-in-out 2.7s infinite;
+}
+
+.nf-fade-up {
+  opacity: 0;
+  animation: nf-fade-up 0.8s ease var(--nf-delay, 0s) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-draw [pathLength],
+  .nf-glow,
+  .nf-fade-up {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  .nf-glow {
+    opacity: 0.22;
+  }
+}
+
 /* Global Styles for Responsive Design */
 
 @media (max-width: 976px) {
