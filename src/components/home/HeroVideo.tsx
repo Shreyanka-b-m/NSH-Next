@@ -63,7 +63,7 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
           poster={poster}
           onPlaying={() => setIsVideoReady(true)}
         >
