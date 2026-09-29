@@ -72,6 +72,7 @@ export interface Config {
     properties: Property;
     forms: Form;
     'form-submissions': FormSubmission;
+    'site-migrations': SiteMigration;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    'site-migrations': SiteMigrationsSelect<false> | SiteMigrationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -385,6 +387,19 @@ export interface FormSubmission {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-migrations".
+ */
+export interface SiteMigration {
+  id: number;
+  name: string;
+  filename?: string | null;
+  sizeBytes?: number | null;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -426,6 +441,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'form-submissions';
         value: number | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'site-migrations';
+        value: number | SiteMigration;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -680,6 +699,18 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-migrations_select".
+ */
+export interface SiteMigrationsSelect<T extends boolean = true> {
+  name?: T;
+  filename?: T;
+  sizeBytes?: T;
+  notes?: T;
   updatedAt?: T;
   createdAt?: T;
 }

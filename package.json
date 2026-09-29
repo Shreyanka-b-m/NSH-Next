@@ -19,6 +19,7 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
+    "@novel/payload-plugin-backups": "github:Shreyanka-b-m/payload-plugin-backups#v2.0.0",
     "@payloadcms/db-postgres": "3.89.0",
     "@payloadcms/next": "3.89.0",
     "@payloadcms/plugin-form-builder": "3.89.0",
