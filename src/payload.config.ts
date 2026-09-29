@@ -10,6 +10,7 @@ import { Media } from './collections/Media'
 import { Properties } from './collections/Properties'
 import { migrations } from './migrations'
 import { formBuilder } from './plugins/formBuilder'
+import { backupsPlugin } from '@novel/payload-plugin-backups'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -35,5 +36,5 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
   sharp,
-  plugins: [formBuilder],
+  plugins: [formBuilder, backupsPlugin({ enabled: true })],
 })

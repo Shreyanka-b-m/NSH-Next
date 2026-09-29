@@ -42,6 +42,9 @@ next-env.d.ts
 
 /media
 
+# site backups created by @novel/payload-plugin-backups
+/storage
+
 # Playwright
 node_modules/
 /test-results/
