@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { slugify } from 'payload/shared'
 
 import { revalidateAfterChange, revalidateAfterDelete } from './hooks/revalidateProperties'
 
@@ -26,6 +27,14 @@ export const Properties: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
+      admin: {
+        description:
+          'The page address: /properties/<slug>. Saved in lowercase with hyphens, e.g. "Pine Chase Dr" → "pine-chase-dr".',
+      },
+      hooks: {
+        // Clean the slug before validation, so the unique check compares the final URL.
+        beforeValidate: [({ value }) => (typeof value === 'string' ? slugify(value) : value)],
+      },
     },
 
     {

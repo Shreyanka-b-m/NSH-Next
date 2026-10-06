@@ -182,6 +182,9 @@ export interface Media {
 export interface Property {
   id: number;
   name: string;
+  /**
+   * The page address: /properties/<slug>. Saved in lowercase with hyphens, e.g. "Pine Chase Dr" → "pine-chase-dr".
+   */
   slug: string;
   address?: string | null;
   city?: string | null;
