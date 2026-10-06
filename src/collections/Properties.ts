@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { slugify } from 'payload/shared'
 
+import { redirectOnSlugChange } from './hooks/redirectOnSlugChange'
 import { revalidateAfterChange, revalidateAfterDelete } from './hooks/revalidateProperties'
 import { noIndexField } from '../fields/noIndex'
 
@@ -10,7 +11,7 @@ export const Properties: CollectionConfig = {
     useAsTitle: 'name',
   },
   hooks: {
-    afterChange: [revalidateAfterChange],
+    afterChange: [revalidateAfterChange, redirectOnSlugChange],
     afterDelete: [revalidateAfterDelete],
   },
   access: {

@@ -73,6 +73,7 @@ export interface Config {
     'page-seo': PageSeo;
     forms: Form;
     'form-submissions': FormSubmission;
+    redirects: Redirect;
     'site-migrations': SiteMigration;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -87,6 +88,7 @@ export interface Config {
     'page-seo': PageSeoSelect<false> | PageSeoSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'site-migrations': SiteMigrationsSelect<false> | SiteMigrationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -447,6 +449,33 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
+ * Old addresses that should open another page. Renaming a property slug adds one here automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  /**
+   * The old address. Paste a full URL or a path, e.g. https://novelsignaturehomes.com/gallery/ is saved as /gallery.
+   */
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?: {
+      relationTo: 'properties';
+      value: number | Property;
+    } | null;
+    url?: string | null;
+  };
+  /**
+   * Use 301 (permanent) when the old address is gone for good; Google moves its ranking to the new page.
+   */
+  type: '301' | '302';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-migrations".
  */
@@ -506,6 +535,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'form-submissions';
         value: number | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'site-migrations';
@@ -789,6 +822,23 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
+      };
+  type?: T;
   updatedAt?: T;
   createdAt?: T;
 }

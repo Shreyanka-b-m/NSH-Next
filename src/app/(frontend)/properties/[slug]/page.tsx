@@ -5,6 +5,7 @@ import { getPropertyBySlug } from '@/lib/properties'
 import { mediaAlt } from '@/utilities/mediaAlt'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { propertyStructuredData } from '@/lib/structuredData'
+import { redirectIfListed } from '@/lib/redirects'
 
 // Queries Payload/Postgres; render at request time so the Docker build needs no database.
 export const dynamic = 'force-dynamic'
@@ -51,6 +52,8 @@ export default async function PropertyPage({ params }: PageProps) {
   const property = await getPropertyBySlug(slug)
 
   if (!property) {
+    // An old or renamed property address may be listed in Admin → Redirects.
+    await redirectIfListed(`/properties/${slug}`)
     notFound()
   }
 

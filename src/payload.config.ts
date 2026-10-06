@@ -13,6 +13,7 @@ import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 import { formBuilder } from './plugins/formBuilder'
 import { seo } from './plugins/seo'
+import { redirects } from './plugins/redirects'
 import { backupsPlugin } from '@novel/payload-plugin-backups'
 
 const filename = fileURLToPath(import.meta.url)
@@ -40,5 +41,5 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
   sharp,
-  plugins: [formBuilder, seo, backupsPlugin({ enabled: true })],
+  plugins: [formBuilder, seo, redirects, backupsPlugin({ enabled: true })],
 })

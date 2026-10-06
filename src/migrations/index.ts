@@ -4,6 +4,7 @@ import * as migration_20260929_044605_site_migrations from './20260929_044605_si
 import * as migration_20261005_110819_seo_plugin from './20261005_110819_seo_plugin';
 import * as migration_20261006_065149_site_settings from './20261006_065149_site_settings';
 import * as migration_20261006_070612_page_seo from './20261006_070612_page_seo';
+import * as migration_20261006_110123_redirects from './20261006_110123_redirects';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20261006_070612_page_seo.up,
     down: migration_20261006_070612_page_seo.down,
-    name: '20261006_070612_page_seo'
+    name: '20261006_070612_page_seo',
+  },
+  {
+    up: migration_20261006_110123_redirects.up,
+    down: migration_20261006_110123_redirects.down,
+    name: '20261006_110123_redirects'
   },
 ];
