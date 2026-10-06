@@ -1,8 +1,8 @@
 import { seoPlugin } from '@payloadcms/plugin-seo'
 
+import { DEFAULT_SITE_NAME } from '../globals/SiteSettings'
 import { getStaticPage } from '../lib/staticPages'
-
-const SITE_NAME = 'Novel Signature Homes'
+import { propertyDescription, propertyTitle } from './seoText'
 
 // Adds an "SEO" tab (meta title, description, image) to the collections listed below.
 // The "Auto-generate" buttons in that tab fill the fields from the document's own content.
@@ -13,12 +13,16 @@ export const seo = seoPlugin({
   uploadsCollection: 'media',
   tabbedUI: true,
   // Properties have `name`, Page SEO entries have `page`, Site Settings has `siteName`.
-  generateTitle: ({ doc }) => {
-    const name = doc?.name || getStaticPage(doc?.page)?.title
-    return name ? `${name} | ${SITE_NAME}` : doc?.siteName || SITE_NAME
+  generateTitle: async ({ doc, req }) => {
+    if (doc?.siteName) return doc.siteName
+    const settings = await req.payload.findGlobal({ slug: 'site-settings', req })
+    const siteName = settings.siteName || DEFAULT_SITE_NAME
+    if (doc?.name) return propertyTitle(doc, siteName)
+    const page = getStaticPage(doc?.page)
+    return page?.title ? `${page.title} | ${siteName}` : siteName
   },
   generateDescription: ({ doc }) =>
-    doc?.description?.slice(0, 160) ?? getStaticPage(doc?.page)?.description ?? '',
+    doc?.name ? propertyDescription(doc) : (getStaticPage(doc?.page)?.description ?? ''),
   generateImage: ({ doc }) => doc?.cardImage?.id ?? doc?.cardImage,
   fields: ({ defaultFields }) =>
     defaultFields.map((field) =>
