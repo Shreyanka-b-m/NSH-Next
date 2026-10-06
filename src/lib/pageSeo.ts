@@ -26,6 +26,23 @@ const getCachedPageSeo = unstable_cache(
   { revalidate: 600, tags: [PAGE_SEO_TAG] },
 )
 
+// For /sitemap.xml: the fixed pages ticked "Hide from search engines".
+export const getHiddenPageKeys = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'page-seo',
+      where: { noIndex: { equals: true } },
+      depth: 0,
+      limit: 100,
+      select: { page: true },
+    })
+    return docs.map((doc) => doc.page)
+  },
+  ['page-seo-hidden'],
+  { revalidate: 600, tags: [PAGE_SEO_TAG] },
+)
+
 // Same as getSiteSettings: the build has no database, so prerendered pages start with defaults.
 const getPageSeo = async (page: StaticPageKey) =>
   process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD ? null : getCachedPageSeo(page)
@@ -56,6 +73,7 @@ export async function pageMetadata(key: StaticPageKey): Promise<Metadata> {
     ...(title && { title }),
     description,
     alternates: { canonical: page.path },
+    ...(seo?.noIndex && { robots: { index: false, follow: true } }),
     openGraph: {
       siteName,
       title: shareTitle,

@@ -225,6 +225,10 @@ export interface Property {
   virtualTourUrl?: string | null;
   status: 'for-sale' | 'sold-out' | 'under-contract';
   cardImage: number | Media;
+  /**
+   * Google removes this page from search results and the sitemap leaves it out. Visitors can still open it.
+   */
+  noIndex?: boolean | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -258,6 +262,10 @@ export interface PageSeo {
     | 'privacy-policy'
     | 'terms-and-conditions'
     | 'cookie-policy';
+  /**
+   * Google removes this page from search results and the sitemap leaves it out. Visitors can still open it.
+   */
+  noIndex?: boolean | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -625,6 +633,7 @@ export interface PropertiesSelect<T extends boolean = true> {
   virtualTourUrl?: T;
   status?: T;
   cardImage?: T;
+  noIndex?: T;
   meta?:
     | T
     | {
@@ -641,6 +650,7 @@ export interface PropertiesSelect<T extends boolean = true> {
  */
 export interface PageSeoSelect<T extends boolean = true> {
   page?: T;
+  noIndex?: T;
   meta?:
     | T
     | {

@@ -1,6 +1,7 @@
+import { getHiddenPageKeys } from '@/lib/pageSeo'
 import { getSitemapProperties } from '@/lib/properties'
 import { SERVER_URL } from '@/lib/serverURL'
-import { STATIC_PAGES } from '@/lib/staticPages'
+import { STATIC_PAGES, type StaticPageKey } from '@/lib/staticPages'
 import type { Media } from '@/payload-types'
 
 // Built per request so new properties appear straight away (the build has no database).
@@ -32,13 +33,15 @@ const toXml = (entry: Entry) =>
 // /sitemap.xml: every page search engines should find, with property images for Google Images.
 // Written by hand (not app/sitemap.ts) to link the stylesheet that makes it readable in a browser.
 export async function GET() {
-  const properties = await getSitemapProperties()
+  const [properties, hiddenPages] = await Promise.all([getSitemapProperties(), getHiddenPageKeys()])
 
   const entries: Entry[] = [
-    ...Object.values(STATIC_PAGES).map((page) => ({
-      url: `${SERVER_URL}${page.path}`,
-      images: [],
-    })),
+    ...Object.entries(STATIC_PAGES)
+      .filter(([key]) => !hiddenPages.includes(key as StaticPageKey))
+      .map(([, page]) => ({
+        url: `${SERVER_URL}${page.path}`,
+        images: [],
+      })),
     ...properties.map((property) => ({
       url: `${SERVER_URL}/properties/${property.slug}`,
       lastModified: property.updatedAt,

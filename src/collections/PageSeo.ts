@@ -5,6 +5,7 @@ import type {
 } from 'payload'
 
 import { bustPath, revalidateTagHooks } from './hooks/revalidateTag'
+import { noIndexField } from '../fields/noIndex'
 import { PAGE_SEO_TAG } from '../lib/cacheTags'
 import { STATIC_PAGES, getStaticPage } from '../lib/staticPages'
 
@@ -60,5 +61,6 @@ export const PageSeo: CollectionConfig = {
         description: 'Each page can have one entry.',
       },
     },
+    noIndexField,
   ],
 }

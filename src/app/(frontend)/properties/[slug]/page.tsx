@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: property.meta?.title ? { absolute: property.meta.title } : property.name,
     description,
     alternates: { canonical: `/properties/${property.slug}` },
+    ...(property.noIndex && { robots: { index: false, follow: true } }),
     openGraph: {
       title,
       description,

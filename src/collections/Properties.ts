@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { slugify } from 'payload/shared'
 
 import { revalidateAfterChange, revalidateAfterDelete } from './hooks/revalidateProperties'
+import { noIndexField } from '../fields/noIndex'
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -206,5 +207,7 @@ export const Properties: CollectionConfig = {
       relationTo: 'media',
       required: true,
     },
+
+    noIndexField,
   ],
 }
