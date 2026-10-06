@@ -1,7 +1,10 @@
+import { pageMetadata } from '@/lib/pageSeo'
 import Image from 'next/image'
 import SectionDivider from '@/components/common/SectionDivider'
 import WhyChooseCollage from '@/components/sections/WhyChooseCollage'
 import '../styles.css'
+
+export const generateMetadata = () => pageMetadata('about')
 
 export default function AboutPage() {
   return (
@@ -12,7 +15,7 @@ export default function AboutPage() {
         <div className="relative w-full h-[570px] max-[976px]:h-[300px] max-[768px]:h-[150px] mb-8">
           <Image
             src="/assets/images/about.webp"
-            alt="Hero Banner"
+            alt="Elegant living room with blue velvet sofas and armchairs, gold accents and white orchids"
             fill
             priority
             sizes="100vw"

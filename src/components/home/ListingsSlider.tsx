@@ -8,6 +8,7 @@ import 'swiper/css'
 import { Navigation, Pagination } from 'swiper/modules'
 
 import './ListingsSlider.css'
+import { mediaAlt } from '@/utilities/mediaAlt'
 
 export default function ListingsSlider({ properties }: { properties: any[] }) {
   return (
@@ -61,7 +62,7 @@ function PropertyCard({ property }: { property: any }) {
         {property.cardImage?.url && (
           <Image
             src={property.cardImage.url}
-            alt={property.name}
+            alt={mediaAlt(property.cardImage, property.name)}
             fill
             sizes="(max-width: 768px) 400px, (max-width: 976px) 550px, 610px"
             className="object-cover"

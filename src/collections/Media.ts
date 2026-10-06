@@ -19,6 +19,10 @@ export const Media: CollectionConfig = {
       name: 'alt',
       type: 'text',
       required: true,
+      admin: {
+        description:
+          'Describe what the image shows, for Google and screen readers, e.g. "Open-plan kitchen with marble island and pendant lights". Avoid "image" or file names.',
+      },
     },
   ],
   upload: true,

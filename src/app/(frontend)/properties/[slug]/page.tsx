@@ -1,6 +1,11 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getPropertyBySlug } from '@/lib/properties'
+import { mediaAlt } from '@/utilities/mediaAlt'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { propertyStructuredData } from '@/lib/structuredData'
+import { redirectIfListed } from '@/lib/redirects'
 
 // Queries Payload/Postgres; render at request time so the Docker build needs no database.
 export const dynamic = 'force-dynamic'
@@ -11,19 +16,54 @@ type PageProps = {
   }>
 }
 
+// Uses the SEO tab values from the admin, falling back to the property's own content.
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const property = await getPropertyBySlug(slug)
+
+  if (!property) return {}
+
+  // The SEO tab title is used exactly as typed (it already matches the admin preview);
+  // the property name gets the site-wide " | <site name>" suffix from the layout template.
+  const title = property.meta?.title || property.name
+  const description = property.meta?.description || property.description || undefined
+  const image =
+    (typeof property.meta?.image === 'object' && property.meta.image?.url) ||
+    (typeof property.cardImage === 'object' && property.cardImage?.url) ||
+    undefined
+
+  return {
+    title: property.meta?.title ? { absolute: property.meta.title } : property.name,
+    description,
+    alternates: { canonical: `/properties/${property.slug}` },
+    ...(property.noIndex && { robots: { index: false, follow: true } }),
+    openGraph: {
+      title,
+      description,
+      url: `/properties/${property.slug}`,
+      images: image ? [image] : undefined,
+    },
+  }
+}
+
 export default async function PropertyPage({ params }: PageProps) {
   const { slug } = await params
 
   const property = await getPropertyBySlug(slug)
 
   if (!property) {
+    // An old or renamed property address may be listed in Admin → Redirects.
+    await redirectIfListed(`/properties/${slug}`)
     notFound()
   }
 
   const bannerImages = property.gallery?.filter((item: any) => item.showInBanner === true) || []
 
+  // No <main> here: the frontend layout already wraps every page in one.
   return (
-    <main>
+    <>
+      <JsonLd data={propertyStructuredData(property)} />
+
       {/* Breadcrumb */}
       <section className="container-custom">
         <nav>
@@ -40,7 +80,7 @@ export default async function PropertyPage({ params }: PageProps) {
             {item.image?.url && (
               <Image
                 src={item.image.url}
-                alt={property.name}
+                alt={mediaAlt(item.image, property.name)}
                 width={1200}
                 height={700}
                 sizes="(max-width: 1200px) 100vw, 1200px"
@@ -152,7 +192,7 @@ export default async function PropertyPage({ params }: PageProps) {
             {item.image?.url && (
               <Image
                 src={item.image.url}
-                alt={`Gallery ${index + 1}`}
+                alt={mediaAlt(item.image, `${property.name} photo ${index + 1}`)}
                 width={600}
                 height={400}
                 sizes="(max-width: 600px) 100vw, 600px"
@@ -173,7 +213,7 @@ export default async function PropertyPage({ params }: PageProps) {
             {item.image?.url && (
               <Image
                 src={item.image.url}
-                alt={item.title || property.name}
+                alt={mediaAlt(item.image, item.title || `${property.name} floor plan`)}
                 width={600}
                 height={400}
                 sizes="(max-width: 600px) 100vw, 600px"
@@ -193,6 +233,6 @@ export default async function PropertyPage({ params }: PageProps) {
           </a>
         </section>
       )}
-    </main>
+    </>
   )
 }

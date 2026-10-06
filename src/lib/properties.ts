@@ -61,7 +61,7 @@ export const getPropertyIndex = unstable_cache(
       collection: 'properties',
       depth: 0,
       limit: 100,
-      select: { name: true, slug: true },
+      select: { name: true, slug: true, updatedAt: true },
     })
     return docs
   },
@@ -82,5 +82,23 @@ export const getPropertyBySlug = unstable_cache(
     return docs[0] ?? null
   },
   ['property-by-slug'],
+  cacheOptions,
+)
+
+// For /sitemap.xml: each property's address, last change and images (for Google Images),
+// except those ticked "Hide from search engines".
+export const getSitemapProperties = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'properties',
+      depth: 1,
+      limit: 1000,
+      where: { noIndex: { not_equals: true } },
+      select: { slug: true, updatedAt: true, cardImage: true, gallery: true },
+    })
+    return docs
+  },
+  ['sitemap-properties'],
   cacheOptions,
 )

@@ -70,8 +70,10 @@ export interface Config {
     users: User;
     media: Media;
     properties: Property;
+    'page-seo': PageSeo;
     forms: Form;
     'form-submissions': FormSubmission;
+    redirects: Redirect;
     'site-migrations': SiteMigration;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -83,8 +85,10 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    'page-seo': PageSeoSelect<false> | PageSeoSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'site-migrations': SiteMigrationsSelect<false> | SiteMigrationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -95,8 +99,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -156,6 +164,9 @@ export interface User {
  */
 export interface Media {
   id: number;
+  /**
+   * Describe what the image shows, for Google and screen readers, e.g. "Open-plan kitchen with marble island and pendant lights". Avoid "image" or file names.
+   */
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -176,6 +187,9 @@ export interface Media {
 export interface Property {
   id: number;
   name: string;
+  /**
+   * The page address: /properties/<slug>. Saved in lowercase with hyphens, e.g. "Pine Chase Dr" → "pine-chase-dr".
+   */
   slug: string;
   address?: string | null;
   city?: string | null;
@@ -213,6 +227,55 @@ export interface Property {
   virtualTourUrl?: string | null;
   status: 'for-sale' | 'sold-out' | 'under-contract';
   cardImage: number | Media;
+  /**
+   * Google removes this page from search results and the sitemap leaves it out. Visitors can still open it.
+   */
+  noIndex?: boolean | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Overrides the Site Settings defaults for one page. A page without an entry here uses its built-in defaults.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-seo".
+ */
+export interface PageSeo {
+  id: number;
+  /**
+   * Each page can have one entry.
+   */
+  page:
+    | 'home'
+    | 'about'
+    | 'concierge'
+    | 'properties'
+    | 'buy-a-home'
+    | 'trade-inquiry'
+    | 'other-inquiries'
+    | 'privacy-policy'
+    | 'terms-and-conditions'
+    | 'cookie-policy';
+  /**
+   * Google removes this page from search results and the sitemap leaves it out. Visitors can still open it.
+   */
+  noIndex?: boolean | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -386,6 +449,33 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
+ * Old addresses that should open another page. Renaming a property slug adds one here automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: number;
+  /**
+   * The old address. Paste a full URL or a path, e.g. https://novelsignaturehomes.com/gallery/ is saved as /gallery.
+   */
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?: {
+      relationTo: 'properties';
+      value: number | Property;
+    } | null;
+    url?: string | null;
+  };
+  /**
+   * Use 301 (permanent) when the old address is gone for good; Google moves its ranking to the new page.
+   */
+  type: '301' | '302';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-migrations".
  */
@@ -435,12 +525,20 @@ export interface PayloadLockedDocument {
         value: number | Property;
       } | null)
     | ({
+        relationTo: 'page-seo';
+        value: number | PageSeo;
+      } | null)
+    | ({
         relationTo: 'forms';
         value: number | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
         value: number | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'redirects';
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'site-migrations';
@@ -568,6 +666,31 @@ export interface PropertiesSelect<T extends boolean = true> {
   virtualTourUrl?: T;
   status?: T;
   cardImage?: T;
+  noIndex?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-seo_select".
+ */
+export interface PageSeoSelect<T extends boolean = true> {
+  page?: T;
+  noIndex?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -704,6 +827,23 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects_select".
+ */
+export interface RedirectsSelect<T extends boolean = true> {
+  from?: T;
+  to?:
+    | T
+    | {
+        type?: T;
+        reference?: T;
+        url?: T;
+      };
+  type?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-migrations_select".
  */
 export interface SiteMigrationsSelect<T extends boolean = true> {
@@ -753,6 +893,46 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * SEO tab: defaults for the whole site: the home page title, and the description and share image for any page that doesn't set its own.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Added to the end of every page title, e.g. "Buy A Home | Novel Signature Homes".
+   */
+  siteName: string;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

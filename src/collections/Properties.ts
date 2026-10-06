@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload'
+import { slugify } from 'payload/shared'
 
+import { redirectOnSlugChange } from './hooks/redirectOnSlugChange'
 import { revalidateAfterChange, revalidateAfterDelete } from './hooks/revalidateProperties'
+import { noIndexField } from '../fields/noIndex'
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -8,7 +11,7 @@ export const Properties: CollectionConfig = {
     useAsTitle: 'name',
   },
   hooks: {
-    afterChange: [revalidateAfterChange],
+    afterChange: [revalidateAfterChange, redirectOnSlugChange],
     afterDelete: [revalidateAfterDelete],
   },
   access: {
@@ -26,6 +29,14 @@ export const Properties: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
+      admin: {
+        description:
+          'The page address: /properties/<slug>. Saved in lowercase with hyphens, e.g. "Pine Chase Dr" → "pine-chase-dr".',
+      },
+      hooks: {
+        // Clean the slug before validation, so the unique check compares the final URL.
+        beforeValidate: [({ value }) => (typeof value === 'string' ? slugify(value) : value)],
+      },
     },
 
     {
@@ -197,5 +208,7 @@ export const Properties: CollectionConfig = {
       relationTo: 'media',
       required: true,
     },
+
+    noIndexField,
   ],
 }

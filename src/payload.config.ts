@@ -8,8 +8,12 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Properties } from './collections/Properties'
+import { PageSeo } from './collections/PageSeo'
+import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 import { formBuilder } from './plugins/formBuilder'
+import { seo } from './plugins/seo'
+import { redirects } from './plugins/redirects'
 import { backupsPlugin } from '@novel/payload-plugin-backups'
 
 const filename = fileURLToPath(import.meta.url)
@@ -22,7 +26,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Properties],
+  collections: [Users, Media, Properties, PageSeo],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -36,5 +41,5 @@ export default buildConfig({
     prodMigrations: migrations,
   }),
   sharp,
-  plugins: [formBuilder, backupsPlugin({ enabled: true })],
+  plugins: [formBuilder, seo, redirects, backupsPlugin({ enabled: true })],
 })

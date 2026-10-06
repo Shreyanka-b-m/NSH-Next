@@ -68,7 +68,7 @@ export default function Header() {
     <header className="header">
       <div className="header__container">
         <Link href="/" className="header__logo">
-          <Image src="/assets/images/NSH-Logo.svg" alt="Logo" width={120} height={50} />
+          <Image src="/assets/images/NSH-Logo.svg" alt="Novel Signature Homes" width={120} height={50} />
         </Link>
 
         <nav className={`header__nav ${isMenuOpen ? 'header__nav--open' : ''}`}>

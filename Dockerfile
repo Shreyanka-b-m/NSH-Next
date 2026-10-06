@@ -26,6 +26,11 @@ ARG PAYLOAD_SECRET=build-only-not-a-real-secret
 ENV DATABASE_URL=$DATABASE_URL \
     PAYLOAD_SECRET=$PAYLOAD_SECRET
 
+# Public site address, baked into the build (canonical links, share images, sitemap, robots.txt).
+# Pass it per environment: docker build --build-arg NEXT_PUBLIC_SERVER_URL=https://www.example.com
+ARG NEXT_PUBLIC_SERVER_URL
+ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
+
 RUN npm run build
 
 # ---- runner ----

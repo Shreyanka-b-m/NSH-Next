@@ -1,8 +1,11 @@
+import { pageMetadata } from '@/lib/pageSeo'
 import Link from 'next/link'
 import { getPropertyIndex } from '@/lib/properties'
 
 // Queries Payload/Postgres; render at request time so the Docker build needs no database.
 export const dynamic = 'force-dynamic'
+
+export const generateMetadata = () => pageMetadata('properties')
 
 export default async function PropertiesPage() {
   const properties = await getPropertyIndex()

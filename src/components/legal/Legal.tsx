@@ -1,4 +1,3 @@
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 
@@ -7,15 +6,6 @@ import type { ReactNode } from 'react'
 // unlayered and would otherwise override Tailwind utilities.
 
 type Props = { children: ReactNode }
-
-export function legalMetadata(title: string, description: string): Metadata {
-  const fullTitle = `${title} | Novel Signature Homes`
-  return {
-    title: fullTitle,
-    description,
-    openGraph: { title: fullTitle, description, type: 'website' },
-  }
-}
 
 export function LegalPage({
   title,
