@@ -7,7 +7,7 @@ import { getFormBySlug } from '@/lib/forms'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Trade Inquiry | Novel Signature Homes',
+  title: 'Trade Inquiry',
   description:
     'Builders, architects, designers and suppliers: get in touch about working with Novel Signature Homes.',
 }

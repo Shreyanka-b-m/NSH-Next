@@ -21,6 +21,15 @@ Copy this template to the top of the list below:
 
 ---
 
+## 2026-10-06 — Page titles use the site-wide title suffix
+
+**What changed:** The Buy A Home, Trade Inquiry and Other Inquiries pages now set only their own title (e.g. "Buy A Home"). The " | Novel Signature Homes" suffix is added by the frontend layout from **Site Settings → Site name**. The forms themselves did not change.
+**Why:** Site name and default SEO moved to the new Site Settings page in the admin, so the suffix is defined in one place.
+**Files:** `src/app/(frontend)/buy-a-home/page.tsx`, `src/app/(frontend)/trade-inquiry/page.tsx`, `src/app/(frontend)/other-inquiries/page.tsx`
+**Database:** None (the Site Settings migration is not form-related)
+**Admin action needed:** None
+**By:** Shreyanka (with Claude Code)
+
 ## 2026-09-24 — Documentation added
 
 **What changed:** Added `docs/forms/` (this changelog, [README.md](./README.md) and [DECISIONS.md](./DECISIONS.md)), a forms-docs checkbox in the PR template, a docs rule in `CLAUDE.md`, and "see docs" comments at the top of the key form files.
@@ -34,6 +43,7 @@ Copy this template to the top of the list below:
 
 **What changed:** Forms are now built in the Payload admin (**Forms**) and saved to **Form Submissions**, using `@payloadcms/plugin-form-builder@3.89.0`. One shared `FormRenderer` draws any form, and one `submitForm` server action checks and saves submissions. The three contact forms (`buy-a-home`, `trade-inquiry`, `other-inquiries`) are created by a seed. The earlier hand-coded Inquiries setup (below) was removed.
 Details:
+
 - Enabled field types: text, email, textarea, number, select, checkbox, message. Date, country, state and payment are off.
 - Forms have an extra `slug` field (unique) so pages can find them.
 - Textarea has an extra `rows` setting to control height.

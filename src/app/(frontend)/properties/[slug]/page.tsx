@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getPropertyBySlug } from '@/lib/properties'
@@ -9,6 +10,35 @@ type PageProps = {
   params: Promise<{
     slug: string
   }>
+}
+
+// Uses the SEO tab values from the admin, falling back to the property's own content.
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params
+  const property = await getPropertyBySlug(slug)
+
+  if (!property) return {}
+
+  // The SEO tab title is used exactly as typed (it already matches the admin preview);
+  // the property name gets the site-wide " | <site name>" suffix from the layout template.
+  const title = property.meta?.title || property.name
+  const description = property.meta?.description || property.description || undefined
+  const image =
+    (typeof property.meta?.image === 'object' && property.meta.image?.url) ||
+    (typeof property.cardImage === 'object' && property.cardImage?.url) ||
+    undefined
+
+  return {
+    title: property.meta?.title ? { absolute: property.meta.title } : property.name,
+    description,
+    alternates: { canonical: `/properties/${property.slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `/properties/${property.slug}`,
+      images: image ? [image] : undefined,
+    },
+  }
 }
 
 export default async function PropertyPage({ params }: PageProps) {

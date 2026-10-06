@@ -1,5 +1,10 @@
-import { revalidateTag } from 'next/cache'
-import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, Payload } from 'payload'
+import { revalidatePath, revalidateTag } from 'next/cache'
+import type {
+  CollectionAfterChangeHook,
+  CollectionAfterDeleteHook,
+  GlobalAfterChangeHook,
+  Payload,
+} from 'payload'
 
 const bust = (tag: string, payload: Payload) => {
   try {
@@ -24,3 +29,20 @@ export const revalidateTagHooks = (tag: string) => {
   }
   return { afterChange, afterDelete }
 }
+
+// Global hook that clears a Next.js cache tag whenever the global is saved.
+// `allPages` also refreshes every prerendered page, for site-wide data used in the layout:
+// pages built without a database never fetched the tagged data, so the tag alone misses them.
+export const revalidateGlobalTag =
+  (tag: string, { allPages = false } = {}): GlobalAfterChangeHook =>
+  ({ doc, req: { payload } }) => {
+    bust(tag, payload)
+    if (allPages) {
+      try {
+        revalidatePath('/', 'layout')
+      } catch {
+        // Same as bust(): no Next request context outside the app.
+      }
+    }
+    return doc
+  }

@@ -8,12 +8,12 @@ import type { ReactNode } from 'react'
 
 type Props = { children: ReactNode }
 
+// The " | <site name>" suffix is added by the title template in the frontend layout.
 export function legalMetadata(title: string, description: string): Metadata {
-  const fullTitle = `${title} | Novel Signature Homes`
   return {
-    title: fullTitle,
+    title,
     description,
-    openGraph: { title: fullTitle, description, type: 'website' },
+    openGraph: { title, description, type: 'website' },
   }
 }
 
