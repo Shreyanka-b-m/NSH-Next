@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getPropertyBySlug } from '@/lib/properties'
 import { mediaAlt } from '@/utilities/mediaAlt'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { propertyStructuredData } from '@/lib/structuredData'
 
 // Queries Payload/Postgres; render at request time so the Docker build needs no database.
 export const dynamic = 'force-dynamic'
@@ -54,8 +56,11 @@ export default async function PropertyPage({ params }: PageProps) {
 
   const bannerImages = property.gallery?.filter((item: any) => item.showInBanner === true) || []
 
+  // No <main> here: the frontend layout already wraps every page in one.
   return (
-    <main>
+    <>
+      <JsonLd data={propertyStructuredData(property)} />
+
       {/* Breadcrumb */}
       <section className="container-custom">
         <nav>
@@ -225,6 +230,6 @@ export default async function PropertyPage({ params }: PageProps) {
           </a>
         </section>
       )}
-    </main>
+    </>
   )
 }

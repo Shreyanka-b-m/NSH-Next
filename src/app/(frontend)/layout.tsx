@@ -7,6 +7,8 @@ import { bodyFont, headingFont } from './fonts'
 import { SERVER_URL } from '@/lib/serverURL'
 import { getSiteSettings } from '@/lib/siteSettings'
 import { DEFAULT_DESCRIPTION, DEFAULT_SITE_NAME } from '@/globals/SiteSettings'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { siteStructuredData } from '@/lib/structuredData'
 
 // Static pages stay prerendered. They regenerate in the background at most hourly (so a fresh
 // deploy picks up Site Settings) and immediately after Site Settings is saved.
@@ -38,10 +40,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
+  const settings = await getSiteSettings()
 
   return (
     <html lang="en">
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
+        <JsonLd data={siteStructuredData(settings?.siteName || DEFAULT_SITE_NAME)} />
         <Header />
         <main>{children}</main>
         <Footer />

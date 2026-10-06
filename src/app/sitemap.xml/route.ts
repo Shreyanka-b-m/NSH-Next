@@ -1,6 +1,6 @@
 import { getHiddenPageKeys } from '@/lib/pageSeo'
 import { getSitemapProperties } from '@/lib/properties'
-import { SERVER_URL } from '@/lib/serverURL'
+import { SERVER_URL, absoluteUrl } from '@/lib/serverURL'
 import { STATIC_PAGES, type StaticPageKey } from '@/lib/staticPages'
 import type { Media } from '@/payload-types'
 
@@ -12,10 +12,8 @@ type Entry = { url: string; lastModified?: string; images: string[] }
 
 const escapeXml = (value: string) => value.replace(/[<>&'"]/g, (c) => `&#${c.charCodeAt(0)};`)
 
-const absolute = (url: string) => (url.startsWith('http') ? url : `${SERVER_URL}${url}`)
-
 const imageUrl = (image: number | Media | null | undefined) =>
-  typeof image === 'object' && image?.url ? absolute(image.url) : undefined
+  typeof image === 'object' && image?.url ? absoluteUrl(image.url) : undefined
 
 const toXml = (entry: Entry) =>
   [

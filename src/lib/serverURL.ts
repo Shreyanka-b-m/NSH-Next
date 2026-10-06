@@ -4,3 +4,6 @@ export const SERVER_URL = (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localho
   /\/$/,
   '',
 )
+
+// Makes a site path (e.g. an uploaded image's "/api/media/file/...") a full URL.
+export const absoluteUrl = (url: string) => (url.startsWith('http') ? url : `${SERVER_URL}${url}`)

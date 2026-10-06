@@ -12,6 +12,7 @@ import {
   XIcon,
   YoutubeIcon,
 } from './FooterIcons'
+import { CONTACT_EMAIL, CONTACT_PHONE, SOCIAL_PROFILES, formattedAddress } from '@/lib/contactInfo'
 
 const menuItems = [
   { label: 'Home', href: '/' },
@@ -22,28 +23,16 @@ const menuItems = [
 ]
 
 const socialLinks = [
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/novelsignaturehomes/',
-    Icon: InstagramIcon,
-  },
-  {
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/novel-signature-homes/',
-    Icon: LinkedInIcon,
-  },
-  {
-    label: 'Facebook',
-    href: 'https://www.facebook.com/people/Novel-Signature-Homes/61566500864621/',
-    Icon: FacebookIcon,
-  },
-  { label: 'YouTube', href: 'https://www.youtube.com/@NovelSignatureHomes', Icon: YoutubeIcon },
-  { label: 'X', href: 'https://x.com/nsignaturehomes', Icon: XIcon },
+  { label: 'Instagram', href: SOCIAL_PROFILES.Instagram, Icon: InstagramIcon },
+  { label: 'LinkedIn', href: SOCIAL_PROFILES.LinkedIn, Icon: LinkedInIcon },
+  { label: 'Facebook', href: SOCIAL_PROFILES.Facebook, Icon: FacebookIcon },
+  { label: 'YouTube', href: SOCIAL_PROFILES.YouTube, Icon: YoutubeIcon },
+  { label: 'X', href: SOCIAL_PROFILES.X, Icon: XIcon },
 ]
 
-const contactPhone = '+1 (606)-707-5050'
-const contactEmail = 'info@novelsignaturehomes.com'
-const contactAddress = '11133 Shady Trail #171, Dallas, TX 75229'
+const contactPhone = CONTACT_PHONE
+const contactEmail = CONTACT_EMAIL
+const contactAddress = formattedAddress
 
 export default function Footer() {
   return (
