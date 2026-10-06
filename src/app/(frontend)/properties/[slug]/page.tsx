@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getPropertyBySlug } from '@/lib/properties'
+import { mediaAlt } from '@/utilities/mediaAlt'
 
 // Queries Payload/Postgres; render at request time so the Docker build needs no database.
 export const dynamic = 'force-dynamic'
@@ -70,7 +71,7 @@ export default async function PropertyPage({ params }: PageProps) {
             {item.image?.url && (
               <Image
                 src={item.image.url}
-                alt={property.name}
+                alt={mediaAlt(item.image, property.name)}
                 width={1200}
                 height={700}
                 sizes="(max-width: 1200px) 100vw, 1200px"
@@ -182,7 +183,7 @@ export default async function PropertyPage({ params }: PageProps) {
             {item.image?.url && (
               <Image
                 src={item.image.url}
-                alt={`Gallery ${index + 1}`}
+                alt={mediaAlt(item.image, `${property.name} photo ${index + 1}`)}
                 width={600}
                 height={400}
                 sizes="(max-width: 600px) 100vw, 600px"
@@ -203,7 +204,7 @@ export default async function PropertyPage({ params }: PageProps) {
             {item.image?.url && (
               <Image
                 src={item.image.url}
-                alt={item.title || property.name}
+                alt={mediaAlt(item.image, item.title || `${property.name} floor plan`)}
                 width={600}
                 height={400}
                 sizes="(max-width: 600px) 100vw, 600px"

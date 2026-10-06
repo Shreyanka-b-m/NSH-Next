@@ -9,6 +9,7 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import { mediaAlt } from '@/utilities/mediaAlt'
 
 export default function FeaturedListingsSlider({ properties }: { properties: any[] }) {
   return (
@@ -38,7 +39,7 @@ export default function FeaturedListingsSlider({ properties }: { properties: any
               {property.featuredImage?.url && (
                 <Image
                   src={property.featuredImage.url}
-                  alt={displayName}
+                  alt={mediaAlt(property.featuredImage, displayName)}
                   fill
                   sizes="(max-width: 1400px) 100vw, 1400px"
                   className="object-cover"

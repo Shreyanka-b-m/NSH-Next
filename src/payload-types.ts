@@ -162,6 +162,9 @@ export interface User {
  */
 export interface Media {
   id: number;
+  /**
+   * Describe what the image shows, for Google and screen readers, e.g. "Open-plan kitchen with marble island and pendant lights". Avoid "image" or file names.
+   */
   alt: string;
   updatedAt: string;
   createdAt: string;
