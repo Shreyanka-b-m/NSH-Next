@@ -4,6 +4,7 @@ import { useDocumentInfo, useFormFields, useTheme } from '@payloadcms/ui'
 import React from 'react'
 
 import { SERVER_URL } from '@/lib/serverURL'
+import { getStaticPage } from '@/lib/staticPages'
 
 const SITE_NAME = 'Novel Signature Homes'
 
@@ -46,12 +47,16 @@ export const SeoPreview: React.FC = () => {
   const siteName = useFormFields(([fields]) => fields.siteName?.value as string | undefined)
   const description = useFormFields(([fields]) => fields.description?.value as string | undefined)
   const slug = useFormFields(([fields]) => fields.slug?.value as string | undefined)
+  // Page SEO entries: the selected fixed page supplies the path and default text.
+  const page = getStaticPage(useFormFields(([fields]) => fields.page?.value))
 
   // Same fallbacks as the website: a property name gets the site-name suffix from the layout.
-  const title = metaTitle || (name ? `${name} | ${SITE_NAME}` : siteName || SITE_NAME)
-  const text = metaDescription || description || ''
+  const pageName = name || page?.title
+  const title = metaTitle || (pageName ? `${pageName} | ${SITE_NAME}` : siteName || SITE_NAME)
+  const text = metaDescription || description || page?.description || ''
   const host = SERVER_URL.replace(/^https?:\/\//, '')
-  const breadcrumb = [collectionSlug, slug].filter(Boolean).join(' › ')
+  const pathParts = page ? page.path.split('/') : [collectionSlug, slug]
+  const breadcrumb = pathParts.filter(Boolean).join(' › ')
 
   return (
     <div style={{ marginBottom: 20 }}>

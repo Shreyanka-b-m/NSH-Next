@@ -21,6 +21,15 @@ Copy this template to the top of the list below:
 
 ---
 
+## 2026-10-06 — Form page SEO editable in the admin
+
+**What changed:** The Buy A Home, Trade Inquiry and Other Inquiries pages now get their Google title, description and share image from **Page SEO** in the admin. Their previous text is kept in `src/lib/staticPages.ts` as the default when no Page SEO entry exists. The forms themselves did not change.
+**Why:** Let editors change each page's search and social-share text without a code change.
+**Files:** `src/app/(frontend)/buy-a-home/page.tsx`, `src/app/(frontend)/trade-inquiry/page.tsx`, `src/app/(frontend)/other-inquiries/page.tsx`
+**Database:** None for forms (the Page SEO migration is not form-related)
+**Admin action needed:** None
+**By:** Shreyanka (with Claude Code)
+
 ## 2026-10-06 — Page titles use the site-wide title suffix
 
 **What changed:** The Buy A Home, Trade Inquiry and Other Inquiries pages now set only their own title (e.g. "Buy A Home"). The " | Novel Signature Homes" suffix is added by the frontend layout from **Site Settings → Site name**. The forms themselves did not change.

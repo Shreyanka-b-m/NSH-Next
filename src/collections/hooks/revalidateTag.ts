@@ -30,19 +30,23 @@ export const revalidateTagHooks = (tag: string) => {
   return { afterChange, afterDelete }
 }
 
+// Clears the cached HTML of one path (or, with 'layout', every page below it). Needed for
+// prerendered pages built without a database: they never fetched the tagged data.
+export const bustPath = (path: string, payload: Payload, type?: 'layout' | 'page') => {
+  try {
+    revalidatePath(path, type)
+    payload.logger.info(`Revalidated path "${path}"`)
+  } catch {
+    payload.logger.warn(`Skipped revalidating "${path}" (no Next request context)`)
+  }
+}
+
 // Global hook that clears a Next.js cache tag whenever the global is saved.
-// `allPages` also refreshes every prerendered page, for site-wide data used in the layout:
-// pages built without a database never fetched the tagged data, so the tag alone misses them.
+// `allPages` also refreshes every prerendered page, for site-wide data used in the layout.
 export const revalidateGlobalTag =
   (tag: string, { allPages = false } = {}): GlobalAfterChangeHook =>
   ({ doc, req: { payload } }) => {
     bust(tag, payload)
-    if (allPages) {
-      try {
-        revalidatePath('/', 'layout')
-      } catch {
-        // Same as bust(): no Next request context outside the app.
-      }
-    }
+    if (allPages) bustPath('/', payload, 'layout')
     return doc
   }

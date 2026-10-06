@@ -8,6 +8,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Properties } from './collections/Properties'
+import { PageSeo } from './collections/PageSeo'
 import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 import { formBuilder } from './plugins/formBuilder'
@@ -24,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Properties],
+  collections: [Users, Media, Properties, PageSeo],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

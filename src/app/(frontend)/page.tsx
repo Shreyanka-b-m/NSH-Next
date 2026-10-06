@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/pageSeo'
 import Image from 'next/image'
 
 import Link from 'next/link'
@@ -32,6 +33,8 @@ const why_choose_items = [
       'We believe that location is everything. Our experts carefully select prime locations that offer tranquillity, convenience, and prestige. Enjoy seamless access to top schools, parks, hospitals, and major highways, providing effortless connectivity.',
   },
 ]
+
+export const generateMetadata = () => pageMetadata('home')
 
 export default function HomePage() {
   return (

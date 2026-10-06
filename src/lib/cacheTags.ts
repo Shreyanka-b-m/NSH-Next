@@ -2,3 +2,4 @@
 export const PROPERTIES_TAG = 'properties'
 export const FORMS_TAG = 'forms'
 export const SETTINGS_TAG = 'site-settings'
+export const PAGE_SEO_TAG = 'page-seo'

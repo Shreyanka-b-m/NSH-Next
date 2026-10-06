@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     properties: Property;
+    'page-seo': PageSeo;
     forms: Form;
     'form-submissions': FormSubmission;
     'site-migrations': SiteMigration;
@@ -83,6 +84,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    'page-seo': PageSeoSelect<false> | PageSeoSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'site-migrations': SiteMigrationsSelect<false> | SiteMigrationsSelect<true>;
@@ -217,6 +219,39 @@ export interface Property {
   virtualTourUrl?: string | null;
   status: 'for-sale' | 'sold-out' | 'under-contract';
   cardImage: number | Media;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Overrides the Site Settings defaults for one page. A page without an entry here uses its built-in defaults.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-seo".
+ */
+export interface PageSeo {
+  id: number;
+  /**
+   * Each page can have one entry.
+   */
+  page:
+    | 'home'
+    | 'about'
+    | 'concierge'
+    | 'properties'
+    | 'buy-a-home'
+    | 'trade-inquiry'
+    | 'other-inquiries'
+    | 'privacy-policy'
+    | 'terms-and-conditions'
+    | 'cookie-policy';
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -447,6 +482,10 @@ export interface PayloadLockedDocument {
         value: number | Property;
       } | null)
     | ({
+        relationTo: 'page-seo';
+        value: number | PageSeo;
+      } | null)
+    | ({
         relationTo: 'forms';
         value: number | Form;
       } | null)
@@ -580,6 +619,22 @@ export interface PropertiesSelect<T extends boolean = true> {
   virtualTourUrl?: T;
   status?: T;
   cardImage?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "page-seo_select".
+ */
+export interface PageSeoSelect<T extends boolean = true> {
+  page?: T;
   meta?:
     | T
     | {
@@ -774,6 +829,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * SEO tab: defaults for the whole site: the home page title, and the description and share image for any page that doesn't set its own.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */

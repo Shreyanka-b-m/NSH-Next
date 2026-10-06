@@ -6,14 +6,11 @@ import Header from '@/components/layout/Header'
 import { bodyFont, headingFont } from './fonts'
 import { SERVER_URL } from '@/lib/serverURL'
 import { getSiteSettings } from '@/lib/siteSettings'
-import { DEFAULT_SITE_NAME } from '@/globals/SiteSettings'
+import { DEFAULT_DESCRIPTION, DEFAULT_SITE_NAME } from '@/globals/SiteSettings'
 
 // Static pages stay prerendered. They regenerate in the background at most hourly (so a fresh
 // deploy picks up Site Settings) and immediately after Site Settings is saved.
 export const revalidate = 3600
-
-const DEFAULT_DESCRIPTION =
-  'Luxury Homes redefined. Explore the epitome of modern living with Novel Signature Homes.'
 
 // Site-wide defaults from Admin → Site Settings. Pages override these with their own metadata.
 export async function generateMetadata(): Promise<Metadata> {

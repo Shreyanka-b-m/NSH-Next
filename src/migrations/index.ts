@@ -3,6 +3,7 @@ import * as migration_20260924_100749_form_builder from './20260924_100749_form_
 import * as migration_20260929_044605_site_migrations from './20260929_044605_site_migrations';
 import * as migration_20261005_110819_seo_plugin from './20261005_110819_seo_plugin';
 import * as migration_20261006_065149_site_settings from './20261006_065149_site_settings';
+import * as migration_20261006_070612_page_seo from './20261006_070612_page_seo';
 
 export const migrations = [
   {
@@ -28,6 +29,11 @@ export const migrations = [
   {
     up: migration_20261006_065149_site_settings.up,
     down: migration_20261006_065149_site_settings.down,
-    name: '20261006_065149_site_settings'
+    name: '20261006_065149_site_settings',
+  },
+  {
+    up: migration_20261006_070612_page_seo.up,
+    down: migration_20261006_070612_page_seo.down,
+    name: '20261006_070612_page_seo'
   },
 ];

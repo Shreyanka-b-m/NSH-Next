@@ -1,17 +1,24 @@
 import { seoPlugin } from '@payloadcms/plugin-seo'
 
+import { getStaticPage } from '../lib/staticPages'
+
+const SITE_NAME = 'Novel Signature Homes'
+
 // Adds an "SEO" tab (meta title, description, image) to the collections listed below.
 // The "Auto-generate" buttons in that tab fill the fields from the document's own content.
 // The search preview is our own Google-style component instead of the plugin's plain one.
 export const seo = seoPlugin({
-  collections: ['properties'],
+  collections: ['properties', 'page-seo'],
   globals: ['site-settings'],
   uploadsCollection: 'media',
   tabbedUI: true,
-  // Properties have `name`; Site Settings has `siteName`.
-  generateTitle: ({ doc }) =>
-    doc?.name ? `${doc.name} | Novel Signature Homes` : doc?.siteName || 'Novel Signature Homes',
-  generateDescription: ({ doc }) => doc?.description?.slice(0, 160) ?? '',
+  // Properties have `name`, Page SEO entries have `page`, Site Settings has `siteName`.
+  generateTitle: ({ doc }) => {
+    const name = doc?.name || getStaticPage(doc?.page)?.title
+    return name ? `${name} | ${SITE_NAME}` : doc?.siteName || SITE_NAME
+  },
+  generateDescription: ({ doc }) =>
+    doc?.description?.slice(0, 160) ?? getStaticPage(doc?.page)?.description ?? '',
   generateImage: ({ doc }) => doc?.cardImage?.id ?? doc?.cardImage,
   fields: ({ defaultFields }) =>
     defaultFields.map((field) =>

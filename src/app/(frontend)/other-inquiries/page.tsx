@@ -1,16 +1,12 @@
-import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ContactLayout from '@/components/contact/ContactLayout'
 import { getFormBySlug } from '@/lib/forms'
+import { pageMetadata } from '@/lib/pageSeo'
 
 // Loads its form from Payload; render at request time so the Docker build needs no database.
 export const dynamic = 'force-dynamic'
 
-export const metadata: Metadata = {
-  title: 'Other Inquiries',
-  description:
-    'Questions about homes, neighborhoods, or designs? Reach out to Novel Signature Homes.',
-}
+export const generateMetadata = () => pageMetadata('other-inquiries')
 
 export default async function OtherInquiriesPage() {
   const form = await getFormBySlug('other-inquiries')

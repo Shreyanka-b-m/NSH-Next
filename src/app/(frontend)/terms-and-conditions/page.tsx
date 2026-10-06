@@ -7,13 +7,10 @@ import {
   LegalList,
   LegalPage,
   LegalText,
-  legalMetadata,
 } from '@/components/legal/Legal'
+import { pageMetadata } from '@/lib/pageSeo'
 
-export const metadata = legalMetadata(
-  'Terms and Conditions',
-  'The terms and conditions governing your access to and use of the Novel Signature Homes website.',
-)
+export const generateMetadata = () => pageMetadata('terms-and-conditions')
 
 export default function TermsAndConditionsPage() {
   return (

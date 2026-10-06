@@ -7,13 +7,10 @@ import {
   LegalList,
   LegalPage,
   LegalText,
-  legalMetadata,
 } from '@/components/legal/Legal'
+import { pageMetadata } from '@/lib/pageSeo'
 
-export const metadata = legalMetadata(
-  'Privacy Policy',
-  'How Novel Signature Homes collects, uses, discloses, and protects your personal information.',
-)
+export const generateMetadata = () => pageMetadata('privacy-policy')
 
 export default function PrivacyPolicyPage() {
   return (

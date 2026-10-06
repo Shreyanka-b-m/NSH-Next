@@ -1,7 +1,10 @@
+import { pageMetadata } from '@/lib/pageSeo'
 import Image from 'next/image'
 import SectionDivider from '@/components/common/SectionDivider'
 import WhyChooseCollage from '@/components/sections/WhyChooseCollage'
 import '../styles.css'
+
+export const generateMetadata = () => pageMetadata('about')
 
 export default function AboutPage() {
   return (
