@@ -2,7 +2,7 @@
 
 FROM node:22-slim AS base
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get install -y --no-install-recommends openssl ca-certificates git \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
@@ -19,6 +19,10 @@ COPY . .
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Public site address, inlined at build time (SEO links, sitemap). Set per environment in Coolify.
+ARG NEXT_PUBLIC_SERVER_URL
+ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 
 # DATABASE_URL / PAYLOAD_SECRET only need to be present for the config to load at build time.
 ARG DATABASE_URL=postgresql://placeholder:placeholder@127.0.0.1:5432/placeholder
