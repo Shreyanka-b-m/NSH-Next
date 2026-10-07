@@ -24,6 +24,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Cloudflare's edge cache doesn't reliably serve byte-range responses for cached static
+  // files (confirmed: origin returns correct 206/Content-Range, Cloudflare strips both even
+  // on a fresh MISS). WebKit (every browser on iOS, not just Safari) refuses to play <video>
+  // at all without working Range support, so the hero video silently never plays on iOS.
+  // no-store tells Cloudflare not to cache this path, so it proxies Range requests straight
+  // through to origin instead of trying to serve/slice them from its cache.
+  async headers() {
+    return [
+      {
+        source: '/assets/videos/:path*',
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
+      },
+    ]
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
