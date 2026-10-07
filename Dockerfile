@@ -2,7 +2,7 @@
 
 FROM node:22-slim AS base
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && apt-get install -y --no-install-recommends openssl ca-certificates git \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
@@ -49,6 +49,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Payload's default upload dir; mount a persistent volume here in Coolify.
 RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
+
+# @novel/payload-plugin-backups writes zips here by default. Deliberately NOT a volume:
+# backups are scoped to the current deploy and are expected to disappear on the next one.
+RUN mkdir -p /app/storage/backups && chown -R nextjs:nodejs /app/storage
 
 USER nextjs
 EXPOSE 3000
