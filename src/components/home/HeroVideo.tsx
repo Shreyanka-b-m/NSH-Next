@@ -35,6 +35,10 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
     // are set as DOM properties, not just JSX attributes.
     video.muted = true
     video.playsInline = true
+    // iOS Safari also won't honor a programmatic play() on a video that hasn't
+    // loaded anything yet (readyState stays HAVE_NOTHING with preload="none");
+    // load() forces it to pick up metadata first so play() actually starts.
+    video.load()
     video.play().catch(() => {
       // Autoplay was blocked (e.g. low power mode); poster stays visible.
     })
@@ -63,12 +67,14 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
           muted
           loop
           playsInline
-          preload="none"
+          // "none" starves iOS Safari of the readiness it needs to honor play() below;
+          // "metadata" costs only a small range request, not the full file like "auto" did.
+          preload="metadata"
           poster={poster}
           onPlaying={() => setIsVideoReady(true)}
         >
           {webmSrc && <source src={webmSrc} type="video/webm" />}
-          <source src={mp4Src} />
+          <source src={mp4Src} type="video/mp4" />
         </video>
       )}
     </>
