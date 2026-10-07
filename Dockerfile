@@ -20,10 +20,6 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Public site address, inlined at build time (SEO links, sitemap). Set per environment in Coolify.
-ARG NEXT_PUBLIC_SERVER_URL
-ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
-
 # DATABASE_URL / PAYLOAD_SECRET only need to be present for the config to load at build time.
 ARG DATABASE_URL=postgresql://placeholder:placeholder@127.0.0.1:5432/placeholder
 ARG PAYLOAD_SECRET=build-only-not-a-real-secret
@@ -53,6 +49,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Payload's default upload dir; mount a persistent volume here in Coolify.
 RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
+
+# @novel/payload-plugin-backups writes zips here by default. Deliberately NOT a volume:
+# backups are scoped to the current deploy and are expected to disappear on the next one.
+RUN mkdir -p /app/storage/backups && chown -R nextjs:nodejs /app/storage
 
 USER nextjs
 EXPOSE 3000
