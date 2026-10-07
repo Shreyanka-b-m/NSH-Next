@@ -17,7 +17,7 @@ export default function AboutPage() {
             src="/assets/images/about.webp"
             alt="Elegant living room with blue velvet sofas and armchairs, gold accents and white orchids"
             fill
-            priority
+            preload
             sizes="100vw"
             className="object-cover object-center"
           />

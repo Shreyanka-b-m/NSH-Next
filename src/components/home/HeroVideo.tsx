@@ -48,7 +48,7 @@ export default function HeroVideo({ poster, mp4Src, webmSrc }: HeroVideoProps) {
         alt=""
         aria-hidden="true"
         fill
-        priority
+        preload
         sizes="100vw"
         className="hero-poster"
         style={{ opacity: isVideoReady ? 0 : 1 }}

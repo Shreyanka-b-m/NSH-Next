@@ -19,6 +19,9 @@ export default function VideoShowcase() {
             id="TpsguFWJ9yo"
             title="Explore Our Newest Residences"
             poster="maxresdefault"
+            // Below the fold on every viewport: defer its ~110KB thumbnail fetch so it
+            // doesn't compete with the hero for bandwidth during the critical load window.
+            lazyLoad
           />
         </div>
       </div>

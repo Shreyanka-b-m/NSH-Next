@@ -20,7 +20,7 @@ export default function ContactLayout({ form, subtitle, image, children }: Conta
           src={image.src}
           alt={image.alt}
           fill
-          priority
+          preload
           sizes="(min-width: 977px) 50vw, 100vw"
           className="object-cover object-center"
         />
