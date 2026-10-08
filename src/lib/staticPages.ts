@@ -16,6 +16,13 @@ export const STATIC_PAGES = {
   about: { path: '/about', label: 'About', title: 'About' },
   concierge: { path: '/concierge', label: 'Concierge', title: 'Concierge' },
   properties: { path: '/properties', label: 'Properties', title: 'Properties' },
+  blog: {
+    path: '/blog',
+    label: 'Blog',
+    title: 'Blog',
+    description:
+      'Insights on Houston and Texas luxury real estate, neighborhoods, design and craftsmanship from Novel Signature Homes.',
+  },
   'buy-a-home': {
     path: '/buy-a-home',
     label: 'Buy A Home',

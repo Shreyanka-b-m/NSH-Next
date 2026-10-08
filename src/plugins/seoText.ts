@@ -1,4 +1,5 @@
 import type { Property } from '../payload-types'
+import { fitWords } from '../utilities/fitWords'
 
 // Text for the SEO tab's "Auto-generate" buttons on properties. Lengths follow the plugin's
 // own checklist: titles up to 60 characters, descriptions up to 150.
@@ -10,13 +11,6 @@ const STATUS_LABELS: Record<Property['status'], string> = {
   'for-sale': 'For sale',
   'sold-out': 'Sold',
   'under-contract': 'Under contract',
-}
-
-// Cut at a word boundary (never mid-word) and mark the cut.
-const fitWords = (text: string, max: number) => {
-  if (text.length <= max) return text
-  const cut = text.slice(0, max - 1)
-  return `${cut.slice(0, cut.lastIndexOf(' ')).replace(/[\s,.;:–-]+$/, '')}…`
 }
 
 // Richest title that fits, e.g. "Woodland Heights, 4-Bed Home in Houston | Novel Signature Homes".

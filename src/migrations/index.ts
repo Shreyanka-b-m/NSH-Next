@@ -5,6 +5,7 @@ import * as migration_20261005_110819_seo_plugin from './20261005_110819_seo_plu
 import * as migration_20261006_065149_site_settings from './20261006_065149_site_settings';
 import * as migration_20261006_070612_page_seo from './20261006_070612_page_seo';
 import * as migration_20261006_110123_redirects from './20261006_110123_redirects';
+import * as migration_20261008_052156_blog_posts from './20261008_052156_blog_posts';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20261006_110123_redirects.up,
     down: migration_20261006_110123_redirects.down,
-    name: '20261006_110123_redirects'
+    name: '20261006_110123_redirects',
+  },
+  {
+    up: migration_20261008_052156_blog_posts.up,
+    down: migration_20261008_052156_blog_posts.down,
+    name: '20261008_052156_blog_posts'
   },
 ];
