@@ -14,3 +14,13 @@ export const formatReadingTime = (minutes: number | null | undefined) => {
   const value = minutes || 1
   return `${value} ${value === 1 ? 'min' : 'mins'} read`
 }
+
+const longDateFormat = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'America/Chicago',
+})
+
+// e.g. "October 8, 2026"
+export const formatLongDate = (iso: string) => longDateFormat.format(new Date(iso))

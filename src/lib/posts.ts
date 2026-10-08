@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { POSTS_TAG } from '@/lib/cacheTags'
 import { EXCERPT_MAX } from '@/collections/Posts'
-import { fitWords } from '@/utilities/fitWords'
+import { truncateWords } from '@/utilities/fitWords'
 import { richTextToPlain } from '@/utilities/richText'
 
 // Publish hooks bust this tag immediately; the TTL is only a safety net.
@@ -62,7 +62,7 @@ export const getBlogListing = unstable_cache(
       typeof post.category === 'object' ? post.category?.id : post.category
 
     return {
-      latest: latest ? { ...latest, excerpt: fitWords(latestExcerpt ?? '', EXCERPT_MAX) } : null,
+      latest: latest ? { ...latest, excerpt: truncateWords(latestExcerpt ?? '', EXCERPT_MAX) } : null,
       sections: categories
         .map((category) => ({
           id: category.id,
@@ -73,5 +73,42 @@ export const getBlogListing = unstable_cache(
     }
   },
   ['blog-listing'],
+  cacheOptions,
+)
+
+// One published post for /blog/<slug>. Depth 1 fills in the featured image, the images and
+// links inside the content, and the author, of whom only the name is kept (never the email).
+// `slug` is part of the cache key automatically (unstable_cache keys on arguments).
+export const getPostBySlug = unstable_cache(
+  async (slug: string) => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      where: { and: [published, { slug: { equals: slug } }] },
+      depth: 1,
+      limit: 1,
+      populate: { users: { name: true }, categories: { title: true } },
+    })
+    return docs[0] ?? null
+  },
+  ['post-by-slug'],
+  cacheOptions,
+)
+
+// For /sitemap.xml: each published post's address, last change and featured image,
+// except those ticked "Hide from search engines".
+export const getSitemapPosts = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      where: { and: [published, { noIndex: { not_equals: true } }] },
+      depth: 1,
+      pagination: false,
+      select: { slug: true, updatedAt: true, featuredImage: true },
+    })
+    return docs
+  },
+  ['sitemap-posts'],
   cacheOptions,
 )

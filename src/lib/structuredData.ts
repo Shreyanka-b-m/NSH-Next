@@ -1,6 +1,6 @@
 import { CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, SOCIAL_PROFILES } from '@/lib/contactInfo'
 import { SERVER_URL, absoluteUrl } from '@/lib/serverURL'
-import type { Media, Property } from '@/payload-types'
+import type { Media, Post, Property } from '@/payload-types'
 
 // Structured data (schema.org JSON-LD) that tells search engines what the business and each
 // listing are. Rendered by <JsonLd>. Check output with https://search.google.com/test/rich-results
@@ -115,6 +115,40 @@ export const propertyStructuredData = (property: Property) => {
               availability,
             }
           : undefined,
+      },
+    ],
+  }
+}
+
+// On each blog post: breadcrumbs and the article details (headline, image, dates, author).
+export const postStructuredData = (post: Post, authorName: string | undefined) => {
+  const url = `${SERVER_URL}/blog/${post.slug}`
+  const image = imageUrl(post.featuredImage)
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SERVER_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Blogs', item: `${SERVER_URL}/blog` },
+          { '@type': 'ListItem', position: 3, name: post.title, item: url },
+        ],
+      },
+      {
+        '@type': 'BlogPosting',
+        headline: post.title,
+        url,
+        mainEntityOfPage: url,
+        description: post.meta?.description || post.excerpt || undefined,
+        image: image ? [image] : undefined,
+        datePublished: post.publishedAt ?? post.createdAt,
+        dateModified: post.updatedAt,
+        author: authorName
+          ? { '@type': 'Person', name: authorName }
+          : { '@id': ORGANIZATION_ID },
+        publisher: { '@id': ORGANIZATION_ID },
       },
     ],
   }

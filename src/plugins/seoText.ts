@@ -1,5 +1,6 @@
-import type { Property } from '../payload-types'
+import type { Post, Property } from '../payload-types'
 import { fitWords } from '../utilities/fitWords'
+import { richTextToPlain } from '../utilities/richText'
 
 // Text for the SEO tab's "Auto-generate" buttons on properties. Lengths follow the plugin's
 // own checklist: titles up to 60 characters, descriptions up to 150.
@@ -76,3 +77,16 @@ export const propertyDescription = (property: Partial<Property>) => {
   }
   return fitWords(text, DESCRIPTION_MAX)
 }
+
+// Blog post title, e.g. "Westhaven Estates: Houston's Hidden Gem | Novel Signature Homes",
+// or just the post title when the site name doesn't fit.
+export const postTitle = (post: Partial<Post>, siteName: string) => {
+  const title = post.title?.trim()
+  if (!title) return siteName
+  const withSite = `${title} | ${siteName}`
+  return withSite.length <= TITLE_MAX ? withSite : fitWords(title, TITLE_MAX)
+}
+
+// The post's excerpt, else the start of its text.
+export const postDescription = (post: Partial<Post>) =>
+  fitWords((post.excerpt?.trim() || richTextToPlain(post.content)).replace(/\s+/g, ' '), DESCRIPTION_MAX)

@@ -1,9 +1,12 @@
 import type { CollectionConfig } from 'payload'
 import { slugify } from 'payload/shared'
 
+import { redirectOnSlugChange } from './hooks/redirectOnSlugChange'
 import { revalidatePostsAfterChange, revalidatePostsAfterDelete } from './hooks/revalidatePosts'
+import { noIndexField } from '../fields/noIndex'
 import { readingMinutes } from '../utilities/richText'
 
+// The blog page shows at most this many characters of the excerpt, then "…".
 export const EXCERPT_MAX = 300
 
 // Blog posts, modelled on the Posts collection of Payload's official website template.
@@ -14,7 +17,7 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Blog',
-    defaultColumns: ['title', 'category', 'publishedAt', '_status'],
+    defaultColumns: ['title', 'author', 'category', 'publishedAt', '_status'],
   },
   defaultSort: '-publishedAt',
   versions: {
@@ -25,7 +28,7 @@ export const Posts: CollectionConfig = {
     read: ({ req: { user } }) => (user ? true : { _status: { equals: 'published' } }),
   },
   hooks: {
-    afterChange: [revalidatePostsAfterChange],
+    afterChange: [revalidatePostsAfterChange, redirectOnSlugChange('posts', '/blog')],
     afterDelete: [revalidatePostsAfterDelete],
   },
   fields: [
@@ -41,15 +44,14 @@ export const Posts: CollectionConfig = {
       relationTo: 'media',
       required: true,
       admin: {
-        description: 'Used on the blog cards and at the top of the post.',
+        description: 'Used on the blog cards and as the picture when the post is shared.',
       },
     },
     {
       name: 'excerpt',
       type: 'textarea',
-      maxLength: EXCERPT_MAX,
       admin: {
-        description: `Short summary shown when this is the latest post on the blog page (up to ${EXCERPT_MAX} characters). Leave empty to use the start of the post.`,
+        description: `Short summary shown when this is the latest post on the blog page. Any length: the page shows the first ${EXCERPT_MAX} characters, then "…". Leave empty to use the start of the post.`,
       },
     },
     {
@@ -78,6 +80,22 @@ export const Posts: CollectionConfig = {
             return typeof source === 'string' ? slugify(source) : value
           },
         ],
+      },
+    },
+    {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'users',
+      required: true,
+      // Whoever creates the post. The website shows the user's Name, never the email.
+      defaultValue: ({ user }) => user?.id,
+      admin: {
+        position: 'sidebar',
+        description: 'Filled in with whoever creates the post. Shown on the post as "By <name>".',
+      },
+      hooks: {
+        // Never blank: a save without an author (e.g. via the API) uses the logged-in user.
+        beforeValidate: [({ value, req }) => value || req.user?.id || value],
       },
     },
     {
@@ -123,5 +141,6 @@ export const Posts: CollectionConfig = {
         ],
       },
     },
+    noIndexField,
   ],
 }

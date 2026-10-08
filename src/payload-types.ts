@@ -143,6 +143,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Shown as the author on blog posts, e.g. "Shreyanka B". Never shows the email.
+   */
+  name?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -254,11 +258,11 @@ export interface Post {
   id: number;
   title: string;
   /**
-   * Used on the blog cards and at the top of the post.
+   * Used on the blog cards and as the picture when the post is shared.
    */
   featuredImage: number | Media;
   /**
-   * Short summary shown when this is the latest post on the blog page (up to 300 characters). Leave empty to use the start of the post.
+   * Short summary shown when this is the latest post on the blog page. Any length: the page shows the first 300 characters, then "…". Leave empty to use the start of the post.
    */
   excerpt?: string | null;
   content: {
@@ -281,6 +285,10 @@ export interface Post {
    */
   slug: string;
   /**
+   * Filled in with whoever creates the post. Shown on the post as "By <name>".
+   */
+  author: number | User;
+  /**
    * The blog page section this post is listed in.
    */
   category: number | Category;
@@ -292,6 +300,18 @@ export interface Post {
    * Worked out from the post text each time you save.
    */
   readingTime?: number | null;
+  /**
+   * Google removes this page from search results and the sitemap leaves it out. Visitors can still open it.
+   */
+  noIndex?: boolean | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -520,7 +540,7 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
- * Old addresses that should open another page. Renaming a property slug adds one here automatically.
+ * Old addresses that should open another page. Renaming a property or blog post slug adds one here automatically.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
@@ -533,10 +553,15 @@ export interface Redirect {
   from: string;
   to?: {
     type?: ('reference' | 'custom') | null;
-    reference?: {
-      relationTo: 'properties';
-      value: number | Property;
-    } | null;
+    reference?:
+      | ({
+          relationTo: 'properties';
+          value: number | Property;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
     url?: string | null;
   };
   /**
@@ -670,6 +695,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -766,9 +792,18 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   content?: T;
   slug?: T;
+  author?: T;
   category?: T;
   publishedAt?: T;
   readingTime?: T;
+  noIndex?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

@@ -2,7 +2,7 @@ import { permanentRedirect, redirect } from 'next/navigation'
 import { unstable_cache } from 'next/cache'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
-import { PROPERTIES_TAG, REDIRECTS_TAG } from '@/lib/cacheTags'
+import { POSTS_TAG, PROPERTIES_TAG, REDIRECTS_TAG } from '@/lib/cacheTags'
 import { normalizePath } from '@/utilities/normalizePath'
 import type { Redirect } from '@/payload-types'
 
@@ -14,11 +14,14 @@ const targetOf = (doc: Redirect): string | undefined => {
   if (ref?.relationTo === 'properties' && typeof ref.value === 'object') {
     return `/properties/${ref.value.slug}`
   }
+  if (ref?.relationTo === 'posts' && typeof ref.value === 'object') {
+    return `/blog/${ref.value.slug}`
+  }
   return undefined
 }
 
 // Every redirect as { "/old-path": target }. Small list, cached; it also follows property
-// changes because "To" can point at a property whose slug may change.
+// changes because "To" can point at a property or post whose slug may change.
 const getRedirectMap = unstable_cache(
   async () => {
     const payload = await getPayload({ config })
@@ -33,7 +36,7 @@ const getRedirectMap = unstable_cache(
     return map
   },
   ['redirect-map'],
-  { revalidate: 600, tags: [REDIRECTS_TAG, PROPERTIES_TAG] },
+  { revalidate: 600, tags: [REDIRECTS_TAG, PROPERTIES_TAG, POSTS_TAG] },
 )
 
 // Call right before notFound(): if Admin → Redirects has an entry for this path, go there

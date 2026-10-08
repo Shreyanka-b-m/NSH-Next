@@ -29,7 +29,7 @@ const cleanFromField = (field: Field): Field =>
 // The website checks this list only when a page would otherwise be "not found"
 // (src/lib/redirects.ts), so normal pages never pay for it.
 export const redirects = redirectsPlugin({
-  collections: ['properties'],
+  collections: ['properties', 'posts'],
   redirectTypes: ['301', '302'],
   redirectTypeFieldOverride: {
     defaultValue: '301',
@@ -42,7 +42,7 @@ export const redirects = redirectsPlugin({
     admin: {
       defaultColumns: ['from', 'to.type', 'type', 'updatedAt'],
       description:
-        'Old addresses that should open another page. Renaming a property slug adds one here automatically.',
+        'Old addresses that should open another page. Renaming a property or blog post slug adds one here automatically.',
     },
     fields: ({ defaultFields }) => defaultFields.map(cleanFromField),
     hooks: {

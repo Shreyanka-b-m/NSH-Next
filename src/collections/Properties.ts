@@ -11,7 +11,7 @@ export const Properties: CollectionConfig = {
     useAsTitle: 'name',
   },
   hooks: {
-    afterChange: [revalidateAfterChange, redirectOnSlugChange],
+    afterChange: [revalidateAfterChange, redirectOnSlugChange('properties', '/properties')],
     afterDelete: [revalidateAfterDelete],
   },
   access: {

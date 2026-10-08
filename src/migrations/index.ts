@@ -6,6 +6,7 @@ import * as migration_20261006_065149_site_settings from './20261006_065149_site
 import * as migration_20261006_070612_page_seo from './20261006_070612_page_seo';
 import * as migration_20261006_110123_redirects from './20261006_110123_redirects';
 import * as migration_20261008_052156_blog_posts from './20261008_052156_blog_posts';
+import * as migration_20261008_070507_blog_post_page from './20261008_070507_blog_post_page';
 
 export const migrations = [
   {
@@ -46,6 +47,11 @@ export const migrations = [
   {
     up: migration_20261008_052156_blog_posts.up,
     down: migration_20261008_052156_blog_posts.down,
-    name: '20261008_052156_blog_posts'
+    name: '20261008_052156_blog_posts',
+  },
+  {
+    up: migration_20261008_070507_blog_post_page.up,
+    down: migration_20261008_070507_blog_post_page.down,
+    name: '20261008_070507_blog_post_page'
   },
 ];
