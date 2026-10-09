@@ -3,12 +3,14 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { getPostBySlug } from '@/lib/posts'
+import { getApprovedComments } from '@/lib/comments'
 import { redirectIfListed } from '@/lib/redirects'
 import { postStructuredData } from '@/lib/structuredData'
 import { SERVER_URL } from '@/lib/serverURL'
 import { JsonLd } from '@/components/seo/JsonLd'
 import BlogContent from '@/components/blog/BlogContent'
 import ShareSection from '@/components/blog/ShareSection'
+import CommentsSection from '@/components/blog/CommentsSection'
 import { formatLongDate, formatReadingTime } from '@/utilities/postMeta'
 import { richTextToPlain } from '@/utilities/richText'
 import { fitWords, truncateWords } from '@/utilities/fitWords'
@@ -18,7 +20,8 @@ type PageProps = {
 }
 
 // No posts are built during `next build` (it has no database). Each post is rendered on its
-// first visit, then served as a static page until the post (or an image in it) is saved again.
+// first visit, then served as a static page until the post (or an image in it) is saved again,
+// or one of its comments is approved or un-approved.
 export async function generateStaticParams() {
   return []
 }
@@ -72,6 +75,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound()
   }
 
+  const comments = await getApprovedComments(post.id)
   const author = authorName(post.author)
   const url = `${SERVER_URL}/blog/${post.slug}`
 
@@ -126,6 +130,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         <footer className="mt-14 max-[768px]:mt-10">
           <ShareSection url={url} title={post.title} />
         </footer>
+
+        <CommentsSection postId={post.id} comments={comments} />
       </article>
     </>
   )

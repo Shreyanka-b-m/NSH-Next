@@ -11,6 +11,7 @@ import { Properties } from './collections/Properties'
 import { PageSeo } from './collections/PageSeo'
 import { Posts } from './collections/Posts'
 import { Categories } from './collections/Categories'
+import { Comments } from './collections/Comments'
 import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 import { formBuilder } from './plugins/formBuilder'
@@ -28,7 +29,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Properties, Posts, Categories, PageSeo],
+  collections: [Users, Media, Properties, Posts, Categories, Comments, PageSeo],
   globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

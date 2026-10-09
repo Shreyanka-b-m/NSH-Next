@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionBeforeDeleteHook, CollectionConfig } from 'payload'
 import { slugify } from 'payload/shared'
 
 import { redirectOnSlugChange } from './hooks/redirectOnSlugChange'
@@ -9,6 +9,12 @@ import { readingMinutes } from '../utilities/richText'
 // The blog page shows at most this many characters of the excerpt, then "…".
 export const EXCERPT_MAX = 300
 
+// A deleted post's comments would point at nothing: remove them too (same transaction).
+// Before, not after: deleting the post clears the comments' link to it, so they'd be unfindable.
+const deleteComments: CollectionBeforeDeleteHook = async ({ id, req }) => {
+  await req.payload.delete({ collection: 'comments', where: { post: { equals: id } }, req })
+}
+
 // Blog posts, modelled on the Posts collection of Payload's official website template.
 // Drafts: "Save Draft" keeps changes private; only published posts appear on the website.
 export const Posts: CollectionConfig = {
@@ -17,7 +23,7 @@ export const Posts: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Blog',
-    defaultColumns: ['title', 'author', 'category', 'publishedAt', '_status'],
+    defaultColumns: ['title', 'author', 'category', 'comments', 'publishedAt', '_status'],
   },
   defaultSort: '-publishedAt',
   versions: {
@@ -29,6 +35,7 @@ export const Posts: CollectionConfig = {
   },
   hooks: {
     afterChange: [revalidatePostsAfterChange, redirectOnSlugChange('posts', '/blog')],
+    beforeDelete: [deleteComments],
     afterDelete: [revalidatePostsAfterDelete],
   },
   fields: [
@@ -142,5 +149,13 @@ export const Posts: CollectionConfig = {
       },
     },
     noIndexField,
+    {
+      // List column only (nothing stored): the post's comment count, linking to its comments.
+      name: 'comments',
+      type: 'ui',
+      admin: {
+        components: { Cell: '@/components/admin/CommentsCountCell#CommentsCountCell' },
+      },
+    },
   ],
 }

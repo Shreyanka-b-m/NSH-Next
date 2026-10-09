@@ -26,6 +26,10 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { CommentsCountCell as CommentsCountCell_083fe789ac3c98fd1fd83012f5ccc35c } from '@/components/admin/CommentsCountCell'
+import { CommentPostField as CommentPostField_f0dc09a72378929d52fefe45f1e6eb2b } from '@/components/admin/CommentPostField'
+import { CommentStatusCell as CommentStatusCell_9c5dba733a25ce6b220ee07304ee85a7 } from '@/components/admin/CommentStatusCell'
+import { CommentStatusTabs as CommentStatusTabs_10f7a83400e3a06a4233498be395005d } from '@/components/admin/CommentStatusTabs'
 import { SizeCell as SizeCell_b44de31e31e0b3a63617e47d2f4a84ce } from '@novel/payload-plugin-backups/client'
 import { DownloadCell as DownloadCell_b44de31e31e0b3a63617e47d2f4a84ce } from '@novel/payload-plugin-backups/client'
 import { BackupDashboard as BackupDashboard_b44de31e31e0b3a63617e47d2f4a84ce } from '@novel/payload-plugin-backups/client'
@@ -61,6 +65,10 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/components/admin/CommentsCountCell#CommentsCountCell": CommentsCountCell_083fe789ac3c98fd1fd83012f5ccc35c,
+  "@/components/admin/CommentPostField#CommentPostField": CommentPostField_f0dc09a72378929d52fefe45f1e6eb2b,
+  "@/components/admin/CommentStatusCell#CommentStatusCell": CommentStatusCell_9c5dba733a25ce6b220ee07304ee85a7,
+  "@/components/admin/CommentStatusTabs#CommentStatusTabs": CommentStatusTabs_10f7a83400e3a06a4233498be395005d,
   "@novel/payload-plugin-backups/client#SizeCell": SizeCell_b44de31e31e0b3a63617e47d2f4a84ce,
   "@novel/payload-plugin-backups/client#DownloadCell": DownloadCell_b44de31e31e0b3a63617e47d2f4a84ce,
   "@novel/payload-plugin-backups/client#BackupDashboard": BackupDashboard_b44de31e31e0b3a63617e47d2f4a84ce,

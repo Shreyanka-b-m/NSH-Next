@@ -72,6 +72,7 @@ export interface Config {
     properties: Property;
     posts: Post;
     categories: Category;
+    comments: Comment;
     'page-seo': PageSeo;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -89,6 +90,7 @@ export interface Config {
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
     'page-seo': PageSeoSelect<false> | PageSeoSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -329,6 +331,28 @@ export interface Category {
    * Shown as the section heading, e.g. "Neighborhood & Lifestyle".
    */
   title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Comments appear on the post only after their status is set to Approved. Tick several rows to approve them together (Edit → Status).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments".
+ */
+export interface Comment {
+  id: number;
+  comment: string;
+  name?: string | null;
+  post: number | Post;
+  /**
+   * This comment is a reply to the comment above.
+   */
+  parent?: (number | null) | Comment;
+  /**
+   * Only Approved comments are shown on the post.
+   */
+  status: 'pending' | 'approved' | 'spam';
   updatedAt: string;
   createdAt: string;
 }
@@ -629,6 +653,10 @@ export interface PayloadLockedDocument {
         value: number | Category;
       } | null)
     | ({
+        relationTo: 'comments';
+        value: number | Comment;
+      } | null)
+    | ({
         relationTo: 'page-seo';
         value: number | PageSeo;
       } | null)
@@ -815,6 +843,19 @@ export interface PostsSelect<T extends boolean = true> {
 export interface CategoriesSelect<T extends boolean = true> {
   _order?: T;
   title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments_select".
+ */
+export interface CommentsSelect<T extends boolean = true> {
+  comment?: T;
+  name?: T;
+  post?: T;
+  parent?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

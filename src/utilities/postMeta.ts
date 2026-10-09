@@ -24,3 +24,16 @@ const longDateFormat = new Intl.DateTimeFormat('en-US', {
 
 // e.g. "October 8, 2026"
 export const formatLongDate = (iso: string) => longDateFormat.format(new Date(iso))
+
+const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: '2-digit',
+  timeZone: 'America/Chicago',
+})
+
+// e.g. "October 8, 2026 at 6:40 am"
+export const formatDateTime = (iso: string) =>
+  dateTimeFormat.format(new Date(iso)).replace(/\b(AM|PM)\b/, (m) => m.toLowerCase())

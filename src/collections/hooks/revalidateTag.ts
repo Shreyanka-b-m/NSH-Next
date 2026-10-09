@@ -6,7 +6,7 @@ import type {
   Payload,
 } from 'payload'
 
-const bust = (tag: string, payload: Payload) => {
+export const bustTag = (tag: string, payload: Payload) => {
   try {
     // { expire: 0 }: editors see their change on the very next request.
     revalidateTag(tag, { expire: 0 })
@@ -20,11 +20,11 @@ const bust = (tag: string, payload: Payload) => {
 // Collection hooks that clear a Next.js cache tag whenever a document changes or is deleted.
 export const revalidateTagHooks = (tag: string) => {
   const afterChange: CollectionAfterChangeHook = ({ doc, req: { payload } }) => {
-    bust(tag, payload)
+    bustTag(tag, payload)
     return doc
   }
   const afterDelete: CollectionAfterDeleteHook = ({ doc, req: { payload } }) => {
-    bust(tag, payload)
+    bustTag(tag, payload)
     return doc
   }
   return { afterChange, afterDelete }
@@ -46,7 +46,7 @@ export const bustPath = (path: string, payload: Payload, type?: 'layout' | 'page
 export const revalidateGlobalTag =
   (tag: string, { allPages = false } = {}): GlobalAfterChangeHook =>
   ({ doc, req: { payload } }) => {
-    bust(tag, payload)
+    bustTag(tag, payload)
     if (allPages) bustPath('/', payload, 'layout')
     return doc
   }

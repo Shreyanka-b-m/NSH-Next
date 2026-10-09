@@ -101,3 +101,31 @@
     font-size: 19px;
   }
 }
+
+/* "Comment posted!" note under the comment form: fades in, stays, then fades out. */
+@keyframes comment-posted {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  8%,
+  80% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.comment-posted {
+  animation: comment-posted 5s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comment-posted {
+    animation-duration: 6s;
+    animation-timing-function: steps(1, end);
+  }
+}
