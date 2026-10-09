@@ -9,6 +9,7 @@ import { Navigation, Pagination } from 'swiper/modules'
 
 import './ListingsSlider.css'
 import { mediaAlt } from '@/utilities/mediaAlt'
+import ChevronsRight from '@/components/common/ChevronsRight'
 
 export default function ListingsSlider({ properties }: { properties: any[] }) {
   return (
@@ -96,15 +97,7 @@ function PropertyCard({ property }: { property: any }) {
         <div className="mt-3.5 flex shrink-0 items-center justify-end gap-2.5 text-[#9d6b44] max-[768px]:justify-start">
           <span className="font-semibold">View Property</span>
 
-          <svg className="h-3 w-4" viewBox="0 0 16 12" fill="none" aria-hidden="true">
-            <path
-              d="M1 2 5 6 1 10M6 2l4 4-4 4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ChevronsRight />
         </div>
       </div>
     </Link>

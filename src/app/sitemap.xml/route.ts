@@ -1,5 +1,6 @@
 import { getHiddenPageKeys } from '@/lib/pageSeo'
 import { getSitemapProperties } from '@/lib/properties'
+import { getSitemapPosts } from '@/lib/posts'
 import { SERVER_URL, absoluteUrl } from '@/lib/serverURL'
 import { STATIC_PAGES, type StaticPageKey } from '@/lib/staticPages'
 import type { Media } from '@/payload-types'
@@ -28,10 +29,14 @@ const toXml = (entry: Entry) =>
     .filter(Boolean)
     .join('')
 
-// /sitemap.xml: every page search engines should find, with property images for Google Images.
+// /sitemap.xml: every page search engines should find, with property and post images for Google Images.
 // Written by hand (not app/sitemap.ts) to link the stylesheet that makes it readable in a browser.
 export async function GET() {
-  const [properties, hiddenPages] = await Promise.all([getSitemapProperties(), getHiddenPageKeys()])
+  const [properties, posts, hiddenPages] = await Promise.all([
+    getSitemapProperties(),
+    getSitemapPosts(),
+    getHiddenPageKeys(),
+  ])
 
   const entries: Entry[] = [
     ...Object.entries(STATIC_PAGES)
@@ -51,6 +56,11 @@ export async function GET() {
           ].filter((src): src is string => Boolean(src)),
         ),
       ],
+    })),
+    ...posts.map((post) => ({
+      url: `${SERVER_URL}/blog/${post.slug}`,
+      lastModified: post.updatedAt,
+      images: [imageUrl(post.featuredImage)].filter((src): src is string => Boolean(src)),
     })),
   ]
 

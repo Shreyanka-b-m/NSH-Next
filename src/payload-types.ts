@@ -70,6 +70,9 @@ export interface Config {
     users: User;
     media: Media;
     properties: Property;
+    posts: Post;
+    categories: Category;
+    comments: Comment;
     'page-seo': PageSeo;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -85,6 +88,9 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     properties: PropertiesSelect<false> | PropertiesSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
     'page-seo': PageSeoSelect<false> | PageSeoSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -139,6 +145,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Shown as the author on blog posts, e.g. "Shreyanka B". Never shows the email.
+   */
+  name?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -243,6 +253,110 @@ export interface Property {
   createdAt: string;
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  /**
+   * Used on the blog cards and as the picture when the post is shared.
+   */
+  featuredImage: number | Media;
+  /**
+   * Short summary shown when this is the latest post on the blog page. Any length: the page shows the first 300 characters, then "…". Leave empty to use the start of the post.
+   */
+  excerpt?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * The page address: /blog/<slug>. Leave empty to make one from the title. Saved in lowercase with hyphens.
+   */
+  slug: string;
+  /**
+   * Filled in with whoever creates the post. Shown on the post as "By <name>".
+   */
+  author: number | User;
+  /**
+   * The blog page section this post is listed in.
+   */
+  category: number | Category;
+  /**
+   * Shown on the post cards. Filled in automatically when first published.
+   */
+  publishedAt?: string | null;
+  /**
+   * Worked out from the post text each time you save.
+   */
+  readingTime?: number | null;
+  /**
+   * Google removes this page from search results and the sitemap leaves it out. Visitors can still open it.
+   */
+  noIndex?: boolean | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Each category is a section on the blog page. Drag the rows to change the order of the sections.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  _order?: string | null;
+  /**
+   * Shown as the section heading, e.g. "Neighborhood & Lifestyle".
+   */
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Comments appear on the post only after their status is set to Approved. Tick several rows to approve them together (Edit → Status).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments".
+ */
+export interface Comment {
+  id: number;
+  comment: string;
+  name?: string | null;
+  post: number | Post;
+  /**
+   * This comment is a reply to the comment above.
+   */
+  parent?: (number | null) | Comment;
+  /**
+   * Only Approved comments are shown on the post.
+   */
+  status: 'pending' | 'approved' | 'spam';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Overrides the Site Settings defaults for one page. A page without an entry here uses its built-in defaults.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -258,6 +372,7 @@ export interface PageSeo {
     | 'about'
     | 'concierge'
     | 'properties'
+    | 'blog'
     | 'buy-a-home'
     | 'trade-inquiry'
     | 'other-inquiries'
@@ -449,7 +564,7 @@ export interface FormSubmission {
   createdAt: string;
 }
 /**
- * Old addresses that should open another page. Renaming a property slug adds one here automatically.
+ * Old addresses that should open another page. Renaming a property or blog post slug adds one here automatically.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
@@ -462,10 +577,15 @@ export interface Redirect {
   from: string;
   to?: {
     type?: ('reference' | 'custom') | null;
-    reference?: {
-      relationTo: 'properties';
-      value: number | Property;
-    } | null;
+    reference?:
+      | ({
+          relationTo: 'properties';
+          value: number | Property;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
     url?: string | null;
   };
   /**
@@ -523,6 +643,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'properties';
         value: number | Property;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'comments';
+        value: number | Comment;
       } | null)
     | ({
         relationTo: 'page-seo';
@@ -591,6 +723,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -674,6 +807,55 @@ export interface PropertiesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  content?: T;
+  slug?: T;
+  author?: T;
+  category?: T;
+  publishedAt?: T;
+  readingTime?: T;
+  noIndex?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  _order?: T;
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "comments_select".
+ */
+export interface CommentsSelect<T extends boolean = true> {
+  comment?: T;
+  name?: T;
+  post?: T;
+  parent?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

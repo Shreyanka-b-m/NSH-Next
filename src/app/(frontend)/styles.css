@@ -17,10 +17,11 @@ html {
   -webkit-font-smoothing: antialiased;
 }
 
-html,
-body,
-#app {
-  height: 100%;
+/* Hide sideways overflow on <body> only. Setting it on <html> too (with height: 100%) made
+   <body> its own screen-tall scroll box: the page itself didn't scroll, and anything positioned
+   outside it (e.g. a form's hidden spam-trap field) made the page scroll the body box away,
+   leaving the lower half blank. On <body> alone, the browser applies it to the page instead. */
+body {
   overflow-x: hidden;
 }
 

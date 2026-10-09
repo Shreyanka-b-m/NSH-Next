@@ -1,0 +1,131 @@
+/* Text inside a blog post (rich text from the admin editor). Scoped to .blog-content so the
+   site-wide heading sizes in styles.css don't apply here. */
+.blog-content {
+  /* font-weight: 300; */
+  /* color: #000; */
+}
+
+.blog-content > * + * {
+  margin-top: 1.25em;
+}
+
+.blog-content p,
+.blog-content li {
+  /* font-size: 16px; */
+  line-height: 1.85;
+}
+
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--color-black);
+  margin-top: 1.8em;
+}
+
+.blog-content h2 {
+  font-size: 26px;
+}
+
+.blog-content h3 {
+  font-size: 21px;
+}
+
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  font-size: 18px;
+}
+
+.blog-content strong {
+  font-weight: 600;
+}
+
+.blog-content a {
+  color: var(--color-brown);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.blog-content ul,
+.blog-content ol {
+  padding-left: 1.5em;
+}
+
+.blog-content ul {
+  list-style: disc;
+}
+
+.blog-content ol {
+  list-style: decimal;
+}
+
+.blog-content li + li {
+  margin-top: 0.4em;
+}
+
+.blog-content blockquote {
+  border-left: 2px solid var(--color-brown);
+  padding-left: 1.25em;
+  font-style: italic;
+}
+
+.blog-content img {
+  width: 100%;
+  height: auto;
+  margin: 2em 0;
+}
+
+.blog-content hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #fefefe 0%, #8a561f 50%, #fefefe 100%);
+  margin: 2.5em 0;
+}
+
+@media (max-width: 768px) {
+  .blog-content p,
+  .blog-content li {
+    font-size: 15px;
+  }
+
+  .blog-content h2 {
+    font-size: 22px;
+  }
+
+  .blog-content h3 {
+    font-size: 19px;
+  }
+}
+
+/* "Comment posted!" note under the comment form: fades in, stays, then fades out. */
+@keyframes comment-posted {
+  0% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  8%,
+  80% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.comment-posted {
+  animation: comment-posted 5s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .comment-posted {
+    animation-duration: 6s;
+    animation-timing-function: steps(1, end);
+  }
+}

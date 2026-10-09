@@ -17,7 +17,7 @@ import { CONTACT_EMAIL, CONTACT_PHONE, SOCIAL_PROFILES, formattedAddress } from 
 const menuItems = [
   { label: 'Home', href: '/' },
   { label: 'Properties', href: '/properties' },
-  { label: 'Blogs', href: '/blogs' },
+  { label: 'Blogs', href: '/blog' },
   { label: 'About', href: '/about' },
   { label: 'Contact Us', href: '/contact' },
 ]
