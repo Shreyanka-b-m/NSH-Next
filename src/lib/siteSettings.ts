@@ -3,6 +3,7 @@ import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { SETTINGS_TAG } from '@/lib/cacheTags'
+import { DEFAULT_TIME_ZONE } from '@/globals/SiteSettings'
 
 // Saving Site Settings busts this tag immediately; the TTL is only a safety net.
 const getCachedSiteSettings = unstable_cache(
@@ -18,3 +19,6 @@ const getCachedSiteSettings = unstable_cache(
 // They pick up the saved settings when they regenerate (layout `revalidate`, or on save).
 export const getSiteSettings = async () =>
   process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD ? null : getCachedSiteSettings()
+
+// The time zone website dates are shown in (Site Settings → General).
+export const getTimeZone = async () => (await getSiteSettings())?.timeZone ?? DEFAULT_TIME_ZONE

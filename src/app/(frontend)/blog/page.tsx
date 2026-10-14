@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 
 import { pageMetadata } from '@/lib/pageSeo'
 import { getBlogListing } from '@/lib/posts'
+import { getTimeZone } from '@/lib/siteSettings'
 import BlogHeroCard from '@/components/blog/BlogHeroCard'
 import BlogCard from '@/components/blog/BlogCard'
 import ListingsSection from '@/components/home/ListingsSection'
@@ -14,7 +15,7 @@ export const dynamic = 'force-dynamic'
 export const generateMetadata = () => pageMetadata('blog')
 
 export default async function BlogPage() {
-  const { latest, sections } = await getBlogListing()
+  const [{ latest, sections }, timeZone] = await Promise.all([getBlogListing(), getTimeZone()])
 
   return (
     <>
@@ -46,7 +47,7 @@ export default async function BlogPage() {
 
             <div className="grid grid-cols-1 gap-x-3 gap-y-10 min-[769px]:grid-cols-2 min-[977px]:grid-cols-3">
               {section.posts.map((post) => (
-                <BlogCard key={post.id} post={post} />
+                <BlogCard key={post.id} post={post} timeZone={timeZone} />
               ))}
             </div>
           </section>

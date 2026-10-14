@@ -8,6 +8,8 @@ type ApprovedComment = Pick<Comment, 'id' | 'name' | 'comment' | 'createdAt' | '
 type Props = {
   postId: number
   comments: ApprovedComment[]
+  /** From Site Settings (`getTimeZone`). */
+  timeZone: string
 }
 
 type Thread = { comment: ApprovedComment; replies: { comment: ApprovedComment; to?: string }[] }
@@ -74,11 +76,13 @@ function CommentBody({
   postId,
   comment,
   to,
+  timeZone,
   small = false,
 }: {
   postId: number
   comment: ApprovedComment
   to?: string
+  timeZone: string
   small?: boolean
 }) {
   const name = nameOf(comment)
@@ -92,7 +96,7 @@ function CommentBody({
             {to && <span className="ml-2 text-[13px] font-normal text-[#999]">↳ {to}</span>}
           </p>
           <time dateTime={comment.createdAt} className="text-[12px] text-[#999]">
-            {formatDateTime(comment.createdAt)}
+            {formatDateTime(comment.createdAt, timeZone)}
           </time>
         </div>
         <p className="mt-1.5 text-[15px]! leading-[1.75]! font-light break-words whitespace-pre-line text-[#333] max-[768px]:text-[14px]!">
@@ -106,7 +110,7 @@ function CommentBody({
 
 // "Leave a Comment" form, then the approved comments and replies (the only ones ever sent to
 // the page).
-export default function CommentsSection({ postId, comments }: Props) {
+export default function CommentsSection({ postId, comments, timeZone }: Props) {
   const threads = toThreads(comments)
   const shown = threads.reduce((total, thread) => total + 1 + thread.replies.length, 0)
 
@@ -137,13 +141,19 @@ export default function CommentsSection({ postId, comments }: Props) {
                   key={thread.comment.id}
                   className="border-t border-[#eee] py-6 first:border-t-0 first:pt-2"
                 >
-                  <CommentBody postId={postId} comment={thread.comment} />
+                  <CommentBody postId={postId} comment={thread.comment} timeZone={timeZone} />
 
                   {thread.replies.length > 0 && (
                     <ol className="mt-5 ml-16 space-y-5 border-l border-[#e6ddd2] pl-6 max-[768px]:ml-5 max-[768px]:pl-4">
                       {thread.replies.map(({ comment, to }) => (
                         <li key={comment.id}>
-                          <CommentBody postId={postId} comment={comment} to={to} small />
+                          <CommentBody
+                            postId={postId}
+                            comment={comment}
+                            to={to}
+                            timeZone={timeZone}
+                            small
+                          />
                         </li>
                       ))}
                     </ol>

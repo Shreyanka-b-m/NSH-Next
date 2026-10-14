@@ -9,6 +9,7 @@ import * as migration_20261008_052156_blog_posts from './20261008_052156_blog_po
 import * as migration_20261008_070507_blog_post_page from './20261008_070507_blog_post_page';
 import * as migration_20261008_083909_blog_comments from './20261008_083909_blog_comments';
 import * as migration_20261008_102653_comment_replies from './20261008_102653_comment_replies';
+import * as migration_20261009_045205_site_settings_time_zone from './20261009_045205_site_settings_time_zone';
 
 export const migrations = [
   {
@@ -64,6 +65,11 @@ export const migrations = [
   {
     up: migration_20261008_102653_comment_replies.up,
     down: migration_20261008_102653_comment_replies.down,
-    name: '20261008_102653_comment_replies'
+    name: '20261008_102653_comment_replies',
+  },
+  {
+    up: migration_20261009_045205_site_settings_time_zone.up,
+    down: migration_20261009_045205_site_settings_time_zone.down,
+    name: '20261009_045205_site_settings_time_zone'
   },
 ];

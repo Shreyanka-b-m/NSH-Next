@@ -4,6 +4,7 @@ import config from '@/payload.config'
 import { POSTS_TAG } from '@/lib/cacheTags'
 import { EXCERPT_MAX } from '@/collections/Posts'
 import { truncateWords } from '@/utilities/fitWords'
+import { authorSlug } from '@/utilities/authorPath'
 import { richTextToPlain } from '@/utilities/richText'
 
 // Publish hooks bust this tag immediately; the TTL is only a safety net.
@@ -62,7 +63,9 @@ export const getBlogListing = unstable_cache(
       typeof post.category === 'object' ? post.category?.id : post.category
 
     return {
-      latest: latest ? { ...latest, excerpt: truncateWords(latestExcerpt ?? '', EXCERPT_MAX) } : null,
+      latest: latest
+        ? { ...latest, excerpt: truncateWords(latestExcerpt ?? '', EXCERPT_MAX) }
+        : null,
       sections: categories
         .map((category) => ({
           id: category.id,
@@ -92,6 +95,66 @@ export const getPostBySlug = unstable_cache(
     return docs[0] ?? null
   },
   ['post-by-slug'],
+  cacheOptions,
+)
+
+// "Explore More" under each post: every published post as a card, newest first. One shared
+// list for all posts; each page leaves itself out.
+export const getPostCards = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config })
+    const { docs } = await payload.find({
+      collection: 'posts',
+      where: published,
+      sort: '-publishedAt',
+      depth: 1,
+      pagination: false,
+      select: {
+        title: true,
+        slug: true,
+        featuredImage: true,
+        publishedAt: true,
+        readingTime: true,
+      },
+    })
+    return docs
+  },
+  ['post-cards'],
+  cacheOptions,
+)
+
+// /blog/author/<slug>: the author whose Name makes that slug, and their published posts as
+// cards, newest first. Null when no user matches or they have no published posts.
+export const getAuthorPosts = unstable_cache(
+  async (slug: string) => {
+    const payload = await getPayload({ config })
+    // A handful of users; matching in code avoids storing a separate author slug.
+    const { docs: users } = await payload.find({
+      collection: 'users',
+      depth: 0,
+      pagination: false,
+      select: { name: true },
+    })
+    const author = users.find((user) => user.name?.trim() && authorSlug(user.name) === slug)
+    if (!author?.name) return null
+
+    const { docs: posts } = await payload.find({
+      collection: 'posts',
+      where: { and: [published, { author: { equals: author.id } }] },
+      sort: '-publishedAt',
+      depth: 1,
+      pagination: false,
+      select: {
+        title: true,
+        slug: true,
+        featuredImage: true,
+        publishedAt: true,
+        readingTime: true,
+      },
+    })
+    return posts.length > 0 ? { name: author.name.trim(), posts } : null
+  },
+  ['author-posts'],
   cacheOptions,
 )
 

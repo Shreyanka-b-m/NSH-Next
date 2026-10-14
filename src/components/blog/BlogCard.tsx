@@ -8,16 +8,18 @@ import { formatPostDate, formatReadingTime } from '@/utilities/postMeta'
 
 type Props = {
   post: Pick<Post, 'title' | 'slug' | 'featuredImage' | 'publishedAt' | 'readingTime'>
+  /** From Site Settings (`getTimeZone`). */
+  timeZone: string
 }
 
 // A post in a category section on /blog: image, title, then "Read More" and date / reading time.
 // The whole card is one link. h3 uses `!` to beat the global heading rules in styles.css.
-export default function BlogCard({ post }: Props) {
+export default function BlogCard({ post, timeZone }: Props) {
   const image = typeof post.featuredImage === 'object' ? post.featuredImage : null
 
   return (
     <Link href={`/blog/${post.slug}`} className="group flex flex-col">
-      <div className="relative aspect-[16/7] overflow-hidden min-[977px]:aspect-[7/2]">
+      <div className="relative aspect-[16/7] overflow-hidden min-[977px]:aspect-[7/4]">
         {image?.url && (
           <Image
             src={image.url}
@@ -41,7 +43,7 @@ export default function BlogCard({ post }: Props) {
 
         <div className="flex flex-col items-end text-[12px] leading-[1.6] text-[#888]">
           {post.publishedAt && (
-            <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt)}</time>
+            <time dateTime={post.publishedAt}>{formatPostDate(post.publishedAt, timeZone)}</time>
           )}
           <span>{formatReadingTime(post.readingTime)}</span>
         </div>

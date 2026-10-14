@@ -1,4 +1,14 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionAfterChangeHook, CollectionConfig } from 'payload'
+
+import { POSTS_TAG } from '../lib/cacheTags'
+import { bustTag } from './hooks/revalidateTag'
+
+// The Name is shown on blog posts and makes the author page address (/blog/author/<name>),
+// so renaming someone refreshes the blog. Other saves (e.g. password changes) don't.
+const revalidateBlogOnRename: CollectionAfterChangeHook = ({ doc, previousDoc, req }) => {
+  if (doc.name !== previousDoc?.name) bustTag(POSTS_TAG, req.payload)
+  return doc
+}
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -8,6 +18,9 @@ export const Users: CollectionConfig = {
     defaultColumns: ['name', 'email'],
   },
   auth: true,
+  hooks: {
+    afterChange: [revalidateBlogOnRename],
+  },
   fields: [
     // Email added by default
     {
@@ -18,7 +31,8 @@ export const Users: CollectionConfig = {
       validate: (value: string | null | undefined) =>
         value?.trim() ? true : 'Please enter a name. It is shown as the author on blog posts.',
       admin: {
-        description: 'Shown as the author on blog posts, e.g. "Shreyanka B". Never shows the email.',
+        description:
+          'Shown as the author on blog posts, e.g. "Shreyanka B", and makes their author page address (/blog/author/shreyanka-b). Never shows the email.',
       },
     },
   ],
