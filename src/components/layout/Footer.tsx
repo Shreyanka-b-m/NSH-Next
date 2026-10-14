@@ -19,7 +19,7 @@ const menuItems = [
   { label: 'Properties', href: '/properties' },
   { label: 'Blogs', href: '/blog' },
   { label: 'About', href: '/about' },
-  { label: 'Contact Us', href: '/contact' },
+  { label: 'Contact Us', href: '/buy-a-home' },
 ]
 
 const socialLinks = [
@@ -115,6 +115,7 @@ export default function Footer() {
               <div className="flex flex-col items-center lg:items-start">
                 <a
                   href={`https://maps.app.goo.gl/bpZubMctATeZ9jy76`}
+                  target="_blank"
                   className="flex items-start gap-2.5 text-[15px] leading-snug text-white"
                 >
                   <MapPinIcon className="mt-0.5 h-3.5 w-3.5 shrink-0" />
@@ -129,11 +130,11 @@ export default function Footer() {
           <p className="text-sm text-white">
             Copyright © {new Date().getFullYear()} Novel Signature Homes | All Rights Reserved.{' '}
             <Link href="/privacy-policy" className="underline! hover:text-white/80!">
-              Privacy-Policy
+              Privacy Policy
             </Link>
             .{' '}
             <Link href="/terms-and-conditions" className="underline! hover:text-white/80!">
-              Terms&Conditions
+              Terms & Conditions
             </Link>
           </p>
         </div>

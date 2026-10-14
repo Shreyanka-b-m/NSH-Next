@@ -84,7 +84,7 @@ a {
 
   &:focus {
     opacity: 0.8;
-    outline: none;
+    outline: focus-visible;
   }
 
   &:active {
