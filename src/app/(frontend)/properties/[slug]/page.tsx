@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getPropertyBySlug } from '@/lib/properties'
@@ -65,9 +66,28 @@ export default async function PropertyPage({ params }: PageProps) {
       <JsonLd data={propertyStructuredData(property)} />
 
       {/* Breadcrumb */}
-      <section className="container-custom">
-        <nav>
-          Home {'>'} Properties {'>'} {property.name}
+      <section className="hero-top-gap container-custom pt-[90px]! max-[768px]:pt-10!">
+        <nav aria-label="Breadcrumb" className="text-[15px] max-[768px]:text-[13px]">
+          <ol className="flex flex-wrap items-center gap-x-1.5">
+            <li>
+              <Link href="/" className="transition-colors hover:text-[var(--color-brown)]">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">»</li>
+            <li>
+              <Link
+                href="/properties"
+                className="transition-colors hover:text-[var(--color-brown)]"
+              >
+                Properties
+              </Link>
+            </li>
+            <li aria-hidden="true">»</li>
+            <li aria-current="page" className="font-semibold">
+              {property.name}
+            </li>
+          </ol>
         </nav>
       </section>
 

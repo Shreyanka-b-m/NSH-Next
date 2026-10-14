@@ -40,10 +40,7 @@ export default function HomePage() {
     <>
       {/****************** Hero Section ******************/}
       <section className="hero">
-        <HeroVideo
-          poster="/assets/images/hero-poster.webp"
-          mp4Src="/assets/videos/hero-video 2mb.mp4"
-        />
+        <HeroVideo poster="/assets/images/hero-poster.webp" mp4Src="/assets/videos/nsh-video.mp4" />
 
         <div className="hero-overlay" />
 
