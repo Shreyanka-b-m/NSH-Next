@@ -1,39 +1,43 @@
 // Card details for blog posts, e.g. "05/01/26" and "3 mins read".
 
-// The business is in Texas, so a post published late evening there doesn't show tomorrow's date.
-const dateFormat = new Intl.DateTimeFormat('en-US', {
-  month: '2-digit',
-  day: '2-digit',
-  year: '2-digit',
-  timeZone: 'America/Chicago',
-})
+// Dates are shown in the time zone chosen in Site Settings (see `getTimeZone`), so a post
+// published late evening there doesn't show tomorrow's date. Formatters are built once per zone.
+const formatter = (options: Intl.DateTimeFormatOptions) => {
+  const byZone = new Map<string, Intl.DateTimeFormat>()
+  return (timeZone: string) => {
+    let format = byZone.get(timeZone)
+    if (!format)
+      byZone.set(timeZone, (format = new Intl.DateTimeFormat('en-US', { ...options, timeZone })))
+    return format
+  }
+}
 
-export const formatPostDate = (iso: string) => dateFormat.format(new Date(iso))
+const dateFormat = formatter({ month: '2-digit', day: '2-digit', year: '2-digit' })
+
+export const formatPostDate = (iso: string, timeZone: string) =>
+  dateFormat(timeZone).format(new Date(iso))
 
 export const formatReadingTime = (minutes: number | null | undefined) => {
   const value = minutes || 1
   return `${value} ${value === 1 ? 'min' : 'mins'} read`
 }
 
-const longDateFormat = new Intl.DateTimeFormat('en-US', {
-  month: 'long',
-  day: 'numeric',
-  year: 'numeric',
-  timeZone: 'America/Chicago',
-})
+const longDateFormat = formatter({ month: 'long', day: 'numeric', year: 'numeric' })
 
 // e.g. "October 8, 2026"
-export const formatLongDate = (iso: string) => longDateFormat.format(new Date(iso))
+export const formatLongDate = (iso: string, timeZone: string) =>
+  longDateFormat(timeZone).format(new Date(iso))
 
-const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+const dateTimeFormat = formatter({
   month: 'long',
   day: 'numeric',
   year: 'numeric',
   hour: 'numeric',
   minute: '2-digit',
-  timeZone: 'America/Chicago',
 })
 
 // e.g. "October 8, 2026 at 6:40 am"
-export const formatDateTime = (iso: string) =>
-  dateTimeFormat.format(new Date(iso)).replace(/\b(AM|PM)\b/, (m) => m.toLowerCase())
+export const formatDateTime = (iso: string, timeZone: string) =>
+  dateTimeFormat(timeZone)
+    .format(new Date(iso))
+    .replace(/\b(AM|PM)\b/, (m) => m.toLowerCase())

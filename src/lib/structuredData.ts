@@ -1,5 +1,6 @@
 import { CONTACT_ADDRESS, CONTACT_EMAIL, CONTACT_PHONE, SOCIAL_PROFILES } from '@/lib/contactInfo'
 import { SERVER_URL, absoluteUrl } from '@/lib/serverURL'
+import { authorPath } from '@/utilities/authorPath'
 import type { Media, Post, Property } from '@/payload-types'
 
 // Structured data (schema.org JSON-LD) that tells search engines what the business and each
@@ -146,7 +147,7 @@ export const postStructuredData = (post: Post, authorName: string | undefined) =
         datePublished: post.publishedAt ?? post.createdAt,
         dateModified: post.updatedAt,
         author: authorName
-          ? { '@type': 'Person', name: authorName }
+          ? { '@type': 'Person', name: authorName, url: `${SERVER_URL}${authorPath(authorName)}` }
           : { '@id': ORGANIZATION_ID },
         publisher: { '@id': ORGANIZATION_ID },
       },

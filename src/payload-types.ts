@@ -146,7 +146,7 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   /**
-   * Shown as the author on blog posts, e.g. "Shreyanka B". Never shows the email.
+   * Shown as the author on blog posts, e.g. "Shreyanka B", and makes their author page address (/blog/author/shreyanka-b). Never shows the email.
    */
   name?: string | null;
   updatedAt: string;
@@ -1088,6 +1088,10 @@ export interface SiteSetting {
    * Added to the end of every page title, e.g. "Buy A Home | Novel Signature Homes".
    */
   siteName: string;
+  /**
+   * Dates on the website (blog post dates, comment times) are shown in this time zone. A post published at 9:55 am in India on Oct 9 is still Oct 8 in Texas.
+   */
+  timeZone: 'America/Chicago' | 'Asia/Kolkata';
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -1105,6 +1109,7 @@ export interface SiteSetting {
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
+  timeZone?: T;
   meta?:
     | T
     | {

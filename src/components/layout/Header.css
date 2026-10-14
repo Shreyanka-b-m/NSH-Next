@@ -33,7 +33,7 @@
 .header__nav {
   display: flex;
   align-items: stretch;
-  gap: 15px;
+  gap: 5px;
 }
 
 .header__nav-link {
@@ -185,7 +185,7 @@
   }
 
   .header__nav {
-    gap: 24px;
+    gap: 0;
   }
 }
 

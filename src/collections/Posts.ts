@@ -81,12 +81,37 @@ export const Posts: CollectionConfig = {
       },
       hooks: {
         // Clean the slug before validation, so the unique check compares the final URL.
+        // A typed slug is kept exactly (old WordPress addresses must not change), so a clash
+        // shows "Value must be unique". One made from the title gets "-2", "-3"… if taken,
+        // e.g. when two posts share a title.
         beforeValidate: [
-          ({ value, data }) => {
-            const source = typeof value === 'string' && value.trim() ? value : data?.title
-            return typeof source === 'string' ? slugify(source) : value
+          async ({ value, data, originalDoc, req }) => {
+            if (typeof value === 'string' && value.trim()) return slugify(value)
+            if (typeof data?.title !== 'string' || !data.title.trim()) return value
+
+            const base = slugify(data.title)
+            if (!base) return value
+            const { docs } = await req.payload.find({
+              collection: 'posts',
+              where: {
+                and: [
+                  { slug: { like: base } },
+                  ...(originalDoc?.id ? [{ id: { not_equals: originalDoc.id } }] : []),
+                ],
+              },
+              depth: 0,
+              pagination: false,
+              select: { slug: true },
+              req,
+            })
+            const taken = new Set(docs.map((doc) => doc.slug))
+            let slug = base
+            for (let n = 2; taken.has(slug); n++) slug = `${base}-${n}`
+            return slug
           },
         ],
+        // "Duplicate" in the admin: start the copy without a slug, so one is made from the title.
+        beforeDuplicate: [() => undefined],
       },
     },
     {
